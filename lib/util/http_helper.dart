@@ -57,11 +57,11 @@ class HttpHelper {
 
 class DioInterceptor extends Interceptor{
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     print("DioInterceptor onRequest===> ${options.data}");
     // 添加token
     if(!options.path.contains("/login")){
-      String token =  SpUtil.getValue("token") as String;
+      String token = await SpUtil.getValue("token") as String;
       Map<String, String> headers = {"Authorization":"Bearer " + token};
       options.headers.addAll(headers);
     }

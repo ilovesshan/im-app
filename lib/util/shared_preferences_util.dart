@@ -1,9 +1,11 @@
+import 'package:im/model/user_login_model.dart';
+import 'package:im/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class SpUtil {
   /// 根据Key取值
-  static Object getValue(String key) async {
+  static Future<Object> getValue(String key) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     Object? value = sp.get(key);
     if (value == null) return "";
@@ -20,5 +22,11 @@ class SpUtil {
   static removeValue(String key) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.remove(key);
+  }
+
+  static Future<UserModel> getUserModel() async {
+    Object userInfoJson = await getValue("userInfo");
+    UserModel userModel = UserModel.fromJson(userInfoJson as Map<String,dynamic>);
+    return userModel;
   }
 }
