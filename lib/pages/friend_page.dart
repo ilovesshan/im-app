@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:im/controller/friend_controller.dart';
-import 'package:im/controller/message_controller.dart';
+import 'package:im/controller/friend_list_controller.dart';
 import 'package:im/model/friend_model.dart';
 import 'package:im/router/app_router.dart';
-import 'package:im/util/shared_preferences_util.dart';
-import 'package:im/widgets/message_item.dart';
 import 'package:im/widgets/no_scrol_behavior_widget.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
 
 class FriendPage extends StatelessWidget {
   FriendPage({Key? key}) : super(key: key);
+
+  FriendListController _friendListController = Get.put(FriendListController());
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +37,8 @@ class FriendPage extends StatelessWidget {
             padding:EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               children: [
-                buildFriendFunctionItem(Icons.person_add_outlined, "新的好友" ),
-                buildFriendFunctionItem(Icons.group_add_outlined, "群通知")
+                buildFriendFunctionItem(Icons.person_add_outlined, "新的好友",()=>Get.toNamed(AppRouter.friendApply)!.then((value) => _friendListController.queryFriendList())),
+                buildFriendFunctionItem(Icons.group_add_outlined, "群通知",()=> EasyLoading.showToast("群通知"))
               ],
             ),
           ),
@@ -53,26 +52,14 @@ class FriendPage extends StatelessWidget {
             child: Container(
               color: Colors.white,
               padding:EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ScrollConfiguration(
-                behavior: NoScrollBehaviorWidget(),
-                child: GetBuilder<FriendController>(
-                  init: FriendController(),
-                  builder: (_friendController){
-                    return  ListView.builder(itemBuilder: (context, index){
-                      FriendModel friendModel =  _friendController.friendsList[index];
-                      return Container(
-                        decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))),
-                        child: Row(
-                          children: [
-                            UserAvatarWidget(avatarName: friendModel.username, avatarPath: friendModel.image, radius: 5),
-                            SizedBox(width: 5),
-                            Text(friendModel.username, style: TextStyle(fontSize: 16))
-                          ],
-                        ),
-                      );
-                    }, itemCount: _friendController.friendsList.length);
-                  },
-                )
+              child: GetBuilder<FriendListController>(
+                init: _friendListController,
+                builder: (_friendController){
+                  return  ListView.builder(itemBuilder: (context, index){
+                    FriendModel friendModel =  _friendController.friendsList[index];
+                    return GestureDetector(child: buildFriendListItem(friendModel), onTap: ()=> Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&name=${friendModel.username}"));
+                  }, itemCount: _friendController.friendsList.length);
+                },
               ),
             ),
           )
@@ -81,22 +68,38 @@ class FriendPage extends StatelessWidget {
     );
   }
 
-  Container buildFriendFunctionItem(IconData iconData, String text) {
+  Container buildFriendListItem(FriendModel friendModel) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width:40, height: 40, decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.green),
-            child: Icon(iconData, color: Colors.white),
-          ),
-          SizedBox(width: 20),
-          Expanded(child: Text(text, textAlign: TextAlign.left, style: TextStyle(fontSize: 16))),
-          Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+          UserAvatarWidget(avatarName: friendModel.username, avatarPath: friendModel.image, radius: 5),
+          SizedBox(width: 5),
+          Text(friendModel.username, style: TextStyle(fontSize: 16))
         ],
       ),
+    );
+  }
+
+  Widget buildFriendFunctionItem( IconData iconData, String text,Function onClick) {
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width:40, height: 40, decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.green),
+              child: Icon(iconData, color: Colors.white),
+            ),
+            SizedBox(width: 20),
+            Expanded(child: Text(text, textAlign: TextAlign.left, style: TextStyle(fontSize: 16))),
+            Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+          ],
+        ),
+      ),
+      onTap: ()=> onClick(),
     );
   }
 

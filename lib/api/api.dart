@@ -1,10 +1,12 @@
 import 'package:im/model/friend_model.dart';
 import 'package:im/model/user_login_model.dart';
+import 'package:im/model/user_model.dart';
 import 'package:im/util/http_helper.dart';
 
 class Api {
   static const String loginPath = "/login";
   static const String friend = "/friend";
+  static const String friendApply = "/friend/apply";
 
 
   /// 登录接口
@@ -27,5 +29,45 @@ class Api {
       }
     }
     return friendModelList;
+  }
+
+
+  /// 搜索用户接口
+  static Future<List<UserModel>> searchUserList(String kw) async {
+    final Map<String, dynamic> response = await HttpHelper.instance.get("$friend/$kw");
+    late List<UserModel> userModelList = [];
+    if(response !=null && response["data"] !=null){
+      for(var friend in response["data"]){
+        userModelList.add(UserModel.fromJson(friend));
+      }
+    }
+    return userModelList;
+  }
+
+
+  /// 添加用户接口
+  static Future<bool> addFriend(int id) async {
+    await HttpHelper.instance.post("$friend/$id");
+    return true;
+  }
+
+
+  /// 查询好友申请列表接口
+  static Future<List<UserModel>> queryFriendApplyList() async {
+    final Map<String, dynamic> response = await HttpHelper.instance.get(friendApply);
+    late List<UserModel> userModelList = [];
+    if(response !=null && response["data"] !=null){
+      for(var friend in response["data"]){
+        userModelList.add(UserModel.fromJson(friend));
+      }
+    }
+    return userModelList;
+  }
+
+
+  /// 同意/拒绝好友申请接口
+  static agreeOrRefuseFriendApply(String type, int id) async {
+    await HttpHelper.instance.put("$friendApply/$type/$id");
+    return true;
   }
 }

@@ -80,7 +80,8 @@ class DioInterceptor extends Interceptor{
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print("DioInterceptor onError===> ${err.message}");
-    handler.next(err);
+    print("DioInterceptor onError===> ${err.response}");
+    EasyLoading.showToast(err.response!.data["message"]);
+    // handler.next(err);
   }
 }

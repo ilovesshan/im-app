@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:im/pages/add_friend_page.dart';
 import 'package:im/pages/chat_page.dart';
+import 'package:im/pages/friend_apply_page.dart';
 import 'package:im/pages/login.dart';
 import 'package:im/pages/menu_container.dart';
 
@@ -11,6 +12,7 @@ class AppRouter {
   static const String menuContainer = "/menuContainer";
   static const String chat = "/chat";
   static const String addFriend = "/addFriend";
+  static const String friendApply = "/friendApply";
 
 
   static List<GetPage> routes() {
@@ -19,6 +21,7 @@ class AppRouter {
       GetPage(name: menuContainer, page: () =>  MenuContainerPage()),
       GetPage(name: chat, page: () => ChatPage()),
       GetPage(name: addFriend, page: () =>  AddFriendPage()),
+      GetPage(name: friendApply, page: () =>  FriendApplyPage()),
     ];
   }
 

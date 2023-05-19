@@ -27,13 +27,15 @@ class ChatPage extends StatelessWidget {
         {"text":"回答得不错明天来上班~","isCurrentUser":true},
       ],
     };
+
   @override
   Widget build(BuildContext context) {
-    var messageId = Get.parameters['messageId'];
+    var fid = Get.parameters['fid'];
+    var name = Get.parameters['name'];
     ChatModel chatModel = ChatModel.fromJson(messageInfo);
     return Scaffold(
       appBar: AppBar(
-          title: Text("用户 $messageId"), elevation: 0, centerTitle: true),
+          title: Text(name!), elevation: 0, centerTitle: true),
       body: Column(
         children: [
           // 聊天列表
