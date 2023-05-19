@@ -5,7 +5,7 @@ import 'package:im/pages/login.dart';
 import 'package:im/pages/menu_container.dart';
 
 class AppRouter {
-  static const String initRoute = menuContainer;
+  static const String initRoute = login;
 
   static const String login = "/login";
   static const String menuContainer = "/menuContainer";
