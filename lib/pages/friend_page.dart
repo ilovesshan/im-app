@@ -3,7 +3,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:im/controller/friend_list_controller.dart';
 import 'package:im/model/friend_model.dart';
+import 'package:im/model/user_model.dart';
 import 'package:im/router/app_router.dart';
+import 'package:im/util/shared_preferences_util.dart';
 import 'package:im/widgets/no_scrol_behavior_widget.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
@@ -57,7 +59,10 @@ class FriendPage extends StatelessWidget {
                 builder: (_friendController){
                   return  ListView.builder(itemBuilder: (context, index){
                     FriendModel friendModel =  _friendController.friendsList[index];
-                    return GestureDetector(child: buildFriendListItem(friendModel), onTap: ()=> Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&name=${friendModel.username}"));
+                    return GestureDetector(child: buildFriendListItem(friendModel), onTap: () async {
+                      UserModel userModel = await SpUtil.getUserModel();
+                      Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=${userModel.id}&name=${friendModel.username}");
+                    });
                   }, itemCount: _friendController.friendsList.length);
                 },
               ),

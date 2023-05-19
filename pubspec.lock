@@ -177,6 +177,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.3"
+  just_the_tooltip:
+    dependency: "direct dev"
+    description:
+      name: just_the_tooltip
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.11+2"
   lints:
     dependency: transitive
     description:

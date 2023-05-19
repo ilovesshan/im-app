@@ -22,23 +22,23 @@ class HttpHelper {
     return dio;
   }
 
-  Future<Map<String, dynamic>> get(String url, {Map<String, String>? queryParameters}) {
+  Future<Map<String, dynamic>> get(String url, {Map<String, Object>? queryParameters}) {
       return _baseRequest("get",url, queryParameters: queryParameters);
   }
 
-  Future<Map<String, dynamic>> post(String url, {Map<String, String>? data}) {
+  Future<Map<String, dynamic>> post(String url, {Map<String, Object>? data}) {
       return _baseRequest("post",url, data: data);
   }
 
-  Future<Map<String, dynamic>> put(String url, {Map<String, String>? data}) {
+  Future<Map<String, dynamic>> put(String url, {Map<String, Object>? data}) {
       return _baseRequest("put",url, data: data);
   }
 
-  Future<Map<String, dynamic>> delete(String url, {Map<String, String>? data}) {
+  Future<Map<String, dynamic>> delete(String url, {Map<String, Object>? data}) {
       return _baseRequest("delete",url, data: data);
   }
 
-  Future<Map<String, dynamic>> _baseRequest(String method, String url, {Map<String, String>? queryParameters, Map<String, String>? data}) async {
+  Future<Map<String, dynamic>> _baseRequest(String method, String url, {Map<String, Object>? queryParameters, Map<String, Object>? data}) async {
     Options options = Options(method: method);
     late Response<dynamic> response;
     if("get" == method){
@@ -81,7 +81,6 @@ class DioInterceptor extends Interceptor{
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     print("DioInterceptor onError===> ${err.response}");
-    EasyLoading.showToast(err.response!.data["message"]);
     // handler.next(err);
   }
 }

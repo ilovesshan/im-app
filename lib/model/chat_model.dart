@@ -1,7 +1,5 @@
-// To parse this JSON data, do
-//
-//     final chatModel = chatModelFromJson(jsonString);
-
+import 'package:im/model/user_model.dart';
+import 'package:im/util/text_util.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -10,85 +8,61 @@ ChatModel chatModelFromJson(String str) => ChatModel.fromJson(json.decode(str));
 String chatModelToJson(ChatModel data) => json.encode(data.toJson());
 
 class ChatModel {
-  MUser mUser;
-  YUser yUser;
   List<Message> message;
+  UserModel muser;
+  UserModel yuser;
 
   ChatModel({
-    required this.mUser,
-    required this.yUser,
     required this.message,
+    required this.muser,
+    required this.yuser,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
-    mUser: MUser.fromJson(json["mUser"]),
-    yUser: YUser.fromJson(json["yUser"]),
-    message: List<Message>.from(json["message"].map((x) => Message.fromJson(x))),
+    message: json["message"] == null ? [] : List<Message>.from(json["message"].map((x) => Message.fromJson(x))),
+    muser: UserModel.fromJson(json["muser"]),
+    yuser: UserModel.fromJson(json["yuser"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "mUser": mUser.toJson(),
-    "yUser": yUser.toJson(),
     "message": List<dynamic>.from(message.map((x) => x.toJson())),
-  };
-}
-
-class MUser {
-  String mNickname;
-  String mAvatarUrl;
-
-  MUser({
-    required this.mNickname,
-    required this.mAvatarUrl,
-  });
-
-  factory MUser.fromJson(Map<String, dynamic> json) => MUser(
-    mNickname: json["mNickname"],
-    mAvatarUrl: json["mAvatarUrl"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "mNickname": mNickname,
-    "mAvatarUrl": mAvatarUrl,
+    "muser": muser.toJson(),
+    "yuser": yuser.toJson(),
   };
 }
 
 class Message {
-  String text;
-  bool isCurrentUser;
+  int id;
+  int from;
+  int to;
+  int type;
+  String content;
+  DateTime time;
 
   Message({
-    required this.text,
-    required this.isCurrentUser,
+    required this.id,
+    required this.from,
+    required this.to,
+    required this.type,
+    required this.content,
+    required this.time,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
-    text: json["text"],
-    isCurrentUser: json["isCurrentUser"],
+    id: json["id"],
+    from: json["from"],
+    to: json["to"],
+    type: json["type"],
+    content: json["content"],
+    time: DateTime.parse(json["time"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "text": text,
-    "isCurrentUser": isCurrentUser,
-  };
-}
-
-class YUser {
-  String yNickname;
-  String yAvatarUrl;
-
-  YUser({
-    required this.yNickname,
-    required this.yAvatarUrl,
-  });
-
-  factory YUser.fromJson(Map<String, dynamic> json) => YUser(
-    yNickname: json["yNickname"],
-    yAvatarUrl: json["yAvatarUrl"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "yNickname": yNickname,
-    "yAvatarUrl": yAvatarUrl,
+    "id": id,
+    "from": from,
+    "to": to,
+    "type": type,
+    "content": content,
+    "time": time.toIso8601String(),
   };
 }
