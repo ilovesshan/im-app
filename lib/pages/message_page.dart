@@ -31,7 +31,7 @@ class MessagePage extends StatelessWidget {
             )
           ]
         )),
-        leading: Obx(()=>UserAvatarWidget(avatarName: messageController.userModel.value.username, avatarPath: messageController.userModel.value.image)),
+        leading: Obx(()=>UserAvatarWidget(radius: 20, avatarName: messageController.userModel.value.username, avatarPath: messageController.userModel.value.image)),
         backgroundColor: Colors.white,
         actions: [buildPopupMenuButton()],
       ),
@@ -79,11 +79,11 @@ class MessagePage extends StatelessWidget {
           ),
           PopupMenuItem<String>(
             value: 'createGroup',
-            child: Row(children: [Icon(Icons.people_alt_outlined, color: Colors.black), SizedBox(width: 10), Text('创建群聊')]),
+            child: Row(children: [Icon(Icons.group_add, color: Colors.black), SizedBox(width: 10), Text('创建群聊')]),
           ),
           PopupMenuItem<String>(
             value: 'addGroup',
-            child: Row(children: [Icon(Icons.group_add, color: Colors.black), SizedBox(width: 10), Text('添加群聊')]),
+            child: Row(children: [Icon(Icons.people_alt_outlined, color: Colors.black), SizedBox(width: 10), Text('添加群聊')]),
           ),
           PopupMenuItem<String>(
             value: 'myCard',

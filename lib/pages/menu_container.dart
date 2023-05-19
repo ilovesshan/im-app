@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
 import 'package:im/pages/friend_page.dart';
+import 'package:im/pages/profile.dart';
 import 'package:im/pages/world_page.dart';
 
 import 'message_page.dart';
@@ -18,11 +19,12 @@ class _MenuContainerPageState extends State<MenuContainerPage> {
 
   final List<BrnBottomTabBarItem> _brnBottomTabBarItem = [
     BrnBottomTabBarItem(icon: Icon(Icons.message_outlined), title: Text("消息")),
-    BrnBottomTabBarItem(icon: Icon(Icons.people_alt_outlined), title: Text("朋友")),
-    BrnBottomTabBarItem(icon: Icon(Icons.dynamic_feed_outlined), title: Text("小世界")),
+    BrnBottomTabBarItem(icon: Icon(Icons.perm_contact_cal_rounded), title: Text("朋友")),
+    BrnBottomTabBarItem(icon: Icon(Icons.settings_input_svideo_outlined), title: Text("小世界")),
+    BrnBottomTabBarItem(icon: Icon(Icons.person_outline_outlined), title: Text("我的")),
   ];
 
-  final List<Widget> _pages = [MessagePage(), FriendPage(), WorldPage()];
+  final List<Widget> _pages = [MessagePage(), FriendPage(), WorldPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
