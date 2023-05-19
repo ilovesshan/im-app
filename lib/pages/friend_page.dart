@@ -28,7 +28,7 @@ class FriendPage extends StatelessWidget {
             ]
         ),
         backgroundColor: Colors.white,
-        actions: [Icon(Icons.add_circle_outline_outlined, color: Colors.black), SizedBox(width: 16)],
+        actions: [buildPopupMenuButton()],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,6 +97,41 @@ class FriendPage extends StatelessWidget {
           Icon(Icons.keyboard_arrow_right, color: Colors.grey)
         ],
       ),
+    );
+  }
+
+  PopupMenuButton<String> buildPopupMenuButton() {
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.add_circle_outline_outlined, color: Colors.black),
+      onSelected: (value) {
+        switch(value){
+          case "addFriend":
+            Get.toNamed(AppRouter.addFriend);
+            break;
+          case "scan":
+            EasyLoading.showToast("扫一扫");
+            break;
+          case "myCard":
+            EasyLoading.showToast("我的名片");
+            break;
+        }
+      },
+      itemBuilder: (context) {
+        return <PopupMenuEntry<String>>[
+          PopupMenuItem<String>(
+            value: 'addFriend',
+            child: Row(children: [Icon(Icons.add_outlined, color: Colors.black), SizedBox(width: 10), Text('添加朋友')]),
+          ),
+          PopupMenuItem<String>(
+            value: 'myCard',
+            child: Row(children: [Icon(Icons.person_outline_outlined, color: Colors.black), SizedBox(width: 10), Text('我的名片')]),
+          ),
+          PopupMenuItem<String>(
+            value: 'scan',
+            child: Row(children: [Icon(Icons.add_a_photo_outlined, color: Colors.black), SizedBox(width: 10), Text('扫一扫')]),
+          ),
+        ];
+      },
     );
   }
 }
