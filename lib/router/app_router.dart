@@ -15,10 +15,10 @@ class AppRouter {
 
   static List<GetPage> routes() {
     return [
-      GetPage(name: login, page: () => const LoginPage()),
-      GetPage(name: menuContainer, page: () => const MenuContainerPage()),
+      GetPage(name: login, page: () =>  LoginPage()),
+      GetPage(name: menuContainer, page: () =>  MenuContainerPage()),
       GetPage(name: chat, page: () => ChatPage()),
-      GetPage(name: addFriend, page: () => const AddFriendPage()),
+      GetPage(name: addFriend, page: () =>  AddFriendPage()),
     ];
   }
 

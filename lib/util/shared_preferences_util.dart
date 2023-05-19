@@ -11,7 +11,7 @@ class SpUtil {
   }
 
   /// 根据key设置值
-  static setValue(String key, String value) async {
+  static setValue(String key, Object value) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(key, json.encode(value));
   }
