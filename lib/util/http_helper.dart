@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'dart:convert';
 
 import 'shared_preferences_util.dart';
 
 class HttpHelper {
+  static const String baseurl ="https://63f13562.cpolar.io";
+  static const String baseWsUrl ="ws://7afb399d.cpolar.io/ws";
+
   late final Dio _dio = initDio();
 
   static HttpHelper _instance = HttpHelper();
@@ -12,7 +14,7 @@ class HttpHelper {
 
   Dio initDio(){
     BaseOptions baseOptions = BaseOptions(
-      baseUrl: "https://63f13562.cpolar.io",
+      baseUrl: baseurl,
       sendTimeout: 5000,
       receiveTimeout: 5000,
     );

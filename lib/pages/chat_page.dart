@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:im/controller/socket_controller.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:im/controller/chat_controller.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,28 +12,8 @@ import 'package:im/widgets/user_avatar_widget.dart';
 class ChatPage extends StatelessWidget {
   ChatPage({Key? key}) : super(key: key);
 
-  ChatController _chatController = Get.put(ChatController());
-
-  final Map<String, Object> messageInfo =
-    {
-      "mUser":{
-        "mNickname":"ilovesshan",
-        "mAvatarUrl":"https://avatars.githubusercontent.com/u/63763453?v=4"
-      },
-      "yUser":{
-        "yNickname":"一只小可爱",
-        "yAvatarUrl":"https://avatars.githubusercontent.com/u/42670328?s=200&v=4"
-      },
-      "message":[
-        {"text":"什么是Dart语言？", "isCurrentUser":true},
-        {"text":"flutter为什么推荐使用Dart语言？","isCurrentUser":true},
-        {"text":"Dart是一门面向对象（允许单继承）、垃圾回收的编程语言，它由google公司维护。", "isCurrentUser":false},
-        {"text":"Dart是AOT（ahead of time）运行前编译，使用AOT语言的优点就是使Flutter具有更好的性能。Dart也可以通过JIR（just in time）即时编译，典型应用就是Flutter的热重载。Dart也允许FLutter使用JSX或者XML之类的作为界面构建的声明语言，这使得程序更易阅读和理解。", "isCurrentUser":false},
-        {"text":"有了解过Dart事件循环机制吗？简单谈谈事件循环机制原理","isCurrentUser":true},
-        {"text":"Dart 是基于事件循环机制的单线程模型, 所以 Dart 中没有多线程, 也就没有主线程与子线程之分，Dart单线程是通过消息循环机制来运行的，一共包含两个任务队列微任务队列（Microtask Queue）和事件队列（Event Queue）。Dart在执行完Main函数之后，Event Lopper就开始工作，Event Lopper会优先执行完Microtask Queue队列中的任务，直到Microtask Queue队列为空时才执行Event Queue中的任务，直到Event Queue为空时Event Lopper才能退出。", "isCurrentUser":false},
-        {"text":"回答得不错明天来上班~","isCurrentUser":true},
-      ],
-    };
+  final ChatController _chatController = Get.put(ChatController());
+  final SocketController _socketController = Get.put(SocketController());
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +67,7 @@ class ChatPage extends StatelessWidget {
                             ),
                           ),
                         );
-                      }, itemCount: ( _chatController.chatModel[0].message.length)),
+                      }, itemCount: ( _chatController.chatModel[0].message.length), controller: _chatController.listViewController,),
                     ),
                   ),
                   // 内容输入框
@@ -115,8 +96,9 @@ class ChatPage extends StatelessWidget {
                             width: 60, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(6)),
                             child: Text("发送", style: TextStyle(color: Colors.white)),
                           ),
-                          onTap: (){
-                            _chatController.sendMessage(int.parse(fid));
+                          onTap: () async {
+                            final message = await _chatController.sendMessage(int.parse(fid));
+                            _socketController.sendMessage(message, int.parse(uid!), int.parse(fid));
                           },
                         )
                       ],

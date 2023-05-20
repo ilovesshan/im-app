@@ -60,8 +60,8 @@ class FriendPage extends StatelessWidget {
                   return  ListView.builder(itemBuilder: (context, index){
                     FriendModel friendModel =  _friendController.friendsList[index];
                     return GestureDetector(child: buildFriendListItem(friendModel), onTap: () async {
-                      UserModel userModel = await SpUtil.getUserModel();
-                      Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=${userModel.id}&name=${friendModel.username}");
+                      final String userId = await SpUtil.getValue("userId");
+                      Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=$userId&name=${friendModel.username}");
                     });
                   }, itemCount: _friendController.friendsList.length);
                 },

@@ -11,8 +11,10 @@ class FriendListController extends GetxController {
   void onInit() async {
     super.onInit();
     // 请求好友列表
-    queryFriendList();
+    Future.delayed(const Duration(seconds: 1),()=> queryFriendList());
   }
+
+
 
   Future<void> queryFriendList() async {
      final List<FriendModel> friendModelList = await Api.queryFriendList();

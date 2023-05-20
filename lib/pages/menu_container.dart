@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
+import 'package:get/get.dart';
+
+import 'package:im/controller/socket_controller.dart';
 import 'package:im/pages/friend_page.dart';
 import 'package:im/pages/profile.dart';
 import 'package:im/pages/world_page.dart';
@@ -8,7 +11,6 @@ import 'message_page.dart';
 
 class MenuContainerPage extends StatefulWidget {
   const MenuContainerPage({Key? key}) : super(key: key);
-
   @override
   State<MenuContainerPage> createState() => _MenuContainerPageState();
 }

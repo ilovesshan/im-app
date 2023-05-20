@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:im/controller/message_controller.dart';
+import 'package:im/controller/socket_controller.dart';
 import 'package:im/router/app_router.dart';
 import 'package:im/util/shared_preferences_util.dart';
 import 'package:im/widgets/message_item.dart';
@@ -10,7 +11,6 @@ import 'package:im/widgets/user_avatar_widget.dart';
 class MessagePage extends StatelessWidget {
   MessagePage({Key? key}) : super(key: key);
   MessageController messageController = Get.put(MessageController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
