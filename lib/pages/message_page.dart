@@ -2,45 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:im/controller/message_controller.dart';
-import 'package:im/controller/socket_controller.dart';
+import 'package:im/model/recently_message_model.dart';
+import 'package:im/model/user_model.dart';
 import 'package:im/router/app_router.dart';
 import 'package:im/util/shared_preferences_util.dart';
-import 'package:im/widgets/message_item.dart';
+import 'package:im/widgets/recently_message_item.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
 class MessagePage extends StatelessWidget {
   MessagePage({Key? key}) : super(key: key);
-  MessageController messageController = Get.put(MessageController());
+  final MessageController _messageController = Get.find<MessageController>();
+
   @override
   Widget build(BuildContext context) {
+    _messageController.queryUserInfo();
+    _messageController.queryRecentlyMessageList();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 2,
-        title: Obx(()=>Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(messageController.userModel.value.username,style: TextStyle(color: Colors.black)),
-          SizedBox(width: 10),
-            Row(
-              children: [
-                ClipRRect(child: Container(width: 8, height: 8, color: Colors.green), borderRadius: BorderRadius.circular(10)),
-                SizedBox(width: 4),
-                Text("在线",style: TextStyle(color: Colors.black, fontSize: 12)),
-              ],
-            )
-          ]
-        )),
-        leading: Obx(()=>UserAvatarWidget(radius: 20, avatarName: messageController.userModel.value.username, avatarPath: messageController.userModel.value.image)),
+        title: GetBuilder<MessageController>(
+          init: _messageController,
+          builder: (_){
+            return Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(_messageController.userModel.username,style: TextStyle(color: Colors.black)),
+                  SizedBox(width: 10),
+                  Row(
+                    children: [
+                      ClipRRect(child: Container(width: 8, height: 8, color: Colors.green), borderRadius: BorderRadius.circular(10)),
+                      SizedBox(width: 4),
+                      Text("在线",style: TextStyle(color: Colors.black, fontSize: 12)),
+                    ],
+                  )
+                ]
+            );
+          },
+        ),
+        leading: GetBuilder<MessageController>(
+          init: _messageController,
+          builder: (_){
+            return UserAvatarWidget(radius: 20, avatarName: _messageController.userModel.username, avatarPath: _messageController.userModel.image);
+          },
+        ),
         backgroundColor: Colors.white,
         actions: [buildPopupMenuButton()],
       ),
-      body: ListView.builder(itemBuilder: (context, index){
-        return GestureDetector(
-          child: MessageItem(),
-          onTap: ()=> Get.toNamed("${AppRouter.chat}?messageId=$index"),
-        );
-      }, itemCount: 10),
+      body: GetBuilder<MessageController>(
+        init: _messageController,
+        builder: (_){
+          return ListView.builder(itemBuilder: (context, index){
+            final RecentlyMessageModel recentlyMessageModel =  _messageController.recentlyMessageModelList[index];
+            final UserModel userModel = _messageController.userModel;
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              child: RecentlyMessageItem(recentlyMessageModel:_messageController.recentlyMessageModelList[index]),
+              onTap: (){
+                int fid = recentlyMessageModel.to;
+                if(userModel.id == recentlyMessageModel.to){
+                  fid =  recentlyMessageModel.from;
+                }
+                final targetPath = "${AppRouter.chat}?fid=$fid&uid=${userModel.id}&name=${recentlyMessageModel.username}";
+                Get.toNamed(targetPath)!.then((value) => {
+                  _messageController.queryRecentlyMessageList()
+                });
+              });
+          }, itemCount: _messageController.recentlyMessageModelList.length);
+        },
+      ),
     );
   }
 

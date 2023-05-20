@@ -11,7 +11,8 @@ import 'package:im/api/api.dart';
 
 class LoginController extends GetxController {
   /// 注入 SocketController
-  SocketController _socketController = Get.find<SocketController>();
+  // SocketController _socketController = Get.find<SocketController>();
+  final SocketController _socketController = Get.put<SocketController>(SocketController());
 
   /// 用户名
   var _username = "ilovesshan";

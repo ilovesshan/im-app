@@ -1,5 +1,6 @@
 import 'package:im/model/chat_model.dart';
 import 'package:im/model/friend_model.dart';
+import 'package:im/model/recently_message_model.dart';
 import 'package:im/model/user_login_model.dart';
 import 'package:im/model/user_model.dart';
 import 'package:im/util/http_helper.dart';
@@ -10,6 +11,7 @@ class Api {
   static const String friendApply = "/friend/apply";
   static const String chat = "/chat";
   static const String message = "/message";
+  static const String recentlyMessage = "/message/recently";
 
 
   /// 登录接口
@@ -75,7 +77,7 @@ class Api {
   }
 
 
-  /// 查询聊天记录列表
+  /// 查询聊天记录列表接口
   static  Future<ChatModel> queryChatList(int fid) async {
     final Map<String, dynamic> response = await HttpHelper.instance.get("$message/$fid");
     late ChatModel chatModel ;
@@ -86,9 +88,22 @@ class Api {
   }
 
 
-  /// 发送聊天记录
+  /// 发送聊天记录接口
   static Future<bool> sendMessage(Map<String, Object> requestBody) async{
     await HttpHelper.instance.post(message, data: requestBody);
     return true;
+  }
+
+
+  /// 查询全部好友最近一条聊天记录接口
+  static Future<List<RecentlyMessageModel>> queryRecentlyMessageList() async {
+    final Map<String, dynamic> response = await HttpHelper.instance.get(recentlyMessage);
+    late  List<RecentlyMessageModel> recentlyMessageModelList = [];
+    if(response !=null && response["data"] !=null){
+      for(var message in response["data"]){
+        recentlyMessageModelList.add(RecentlyMessageModel.fromJson(message));
+      }
+    }
+    return recentlyMessageModelList;
   }
 }

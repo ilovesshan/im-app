@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:im/controller/chat_controller.dart';
+import 'package:im/controller/message_controller.dart';
 import 'package:im/controller/socket_controller.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:im/model/user_model.dart';
 
 import 'package:im/router/app_router.dart';
 import 'package:im/util/shared_preferences_util.dart';
 
 void main() async {
   runApp(const RootApplication());
+
+  Get.put(ChatController(), permanent: true);
+  Get.put(MessageController(), permanent: true);
+  Get.put(SocketController(), permanent: true);
+
+  // Get.lazyPut<ChatController>(() => ChatController(), fenix: true);
+  // Get.lazyPut<MessageController>(() => MessageController());
+  // Get.lazyPut<SocketController>(() => SocketController());
+
   await SharedPreferencesUtil.initSharedPreferences();
 }
 
@@ -20,7 +30,7 @@ class RootApplication extends StatefulWidget {
 }
 
 class _RootApplicationState extends State<RootApplication> with WidgetsBindingObserver {
-  SocketController _socketController = Get.put(SocketController());
+  // SocketController _socketController = Get.put(SocketController());
 
   @override
   void initState() {
@@ -38,12 +48,14 @@ class _RootApplicationState extends State<RootApplication> with WidgetsBindingOb
       print("应用当前对用户不可见，无法响应用户输入，并运行在后台。这个事件对应于 Android 中的 `onPause()`；");
     } else if (state == AppLifecycleState.detached) {
      final String userId =  await SpUtil.getValue("userId");
-      _socketController.logout(int.parse(userId));
+      // _socketController.logout(int.parse(userId));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: ImBindings(),
       initialRoute: AppRouter.initRoute,
       getPages: AppRouter.routes(),
       builder: (context, child) => Scaffold(
@@ -73,5 +85,13 @@ class _RootApplicationState extends State<RootApplication> with WidgetsBindingOb
     // 注意deactivate时 请移除监听
     WidgetsBinding.instance!.removeObserver(this);
   }
+}
 
+class ImBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Get.lazyPut<ChatController>(() => ChatController(), fenix: true);
+    // Get.lazyPut<MessageController>(() => MessageController(), fenix: true);
+    // Get.lazyPut<SocketController>(() => SocketController(), fenix: true);
+  }
 }

@@ -12,14 +12,18 @@ import 'package:im/widgets/user_avatar_widget.dart';
 class ChatPage extends StatelessWidget {
   ChatPage({Key? key}) : super(key: key);
 
-  final ChatController _chatController = Get.put(ChatController());
-  final SocketController _socketController = Get.put(SocketController());
+  final ChatController _chatController = Get.find<ChatController>();
+  final SocketController _socketController = Get.find<SocketController>();
+
+  // final ChatController _chatController = Get.put<ChatController>(ChatController());
+  // final SocketController _socketController = Get.put<SocketController>(SocketController());
 
   @override
   Widget build(BuildContext context) {
     var fid = Get.parameters['fid'];
     var uid = Get.parameters['uid'];
     var name = Get.parameters['name'];
+
     _chatController.queryChatList(int.parse(fid!));
 
     return Scaffold(
@@ -28,7 +32,7 @@ class ChatPage extends StatelessWidget {
         title: Text(name!, style: TextStyle(color: Colors.black)),
         leading: GestureDetector(child: Icon(Icons.arrow_back, color: Colors.black), onTap: ()=> Get.back()),
       ),
-      body: GetBuilder(
+      body: GetBuilder<ChatController>(
         init: _chatController,
         builder: (_){
           return _chatController.chatModel.length == 0
