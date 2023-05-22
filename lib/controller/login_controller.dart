@@ -1,17 +1,12 @@
-import 'package:get/get.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter/widgets.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
+
+import 'package:im/api/api.dart';
 import 'package:im/controller/socket_controller.dart';
 import 'package:im/model/user_login_model.dart';
 import 'package:im/router/app_router.dart';
-import 'package:im/util/shared_preferences_util.dart';
 
-import 'package:im/util/text_util.dart';
-import 'package:im/api/api.dart';
 
 class LoginController extends GetxController {
-  /// 注入 SocketController
-  // SocketController _socketController = Get.find<SocketController>();
   final SocketController _socketController = Get.put<SocketController>(SocketController());
 
   /// 用户名

@@ -20,15 +20,14 @@ dev_dependencies:
 
   flutter_lints: ^1.0.0
 
-  fluttertoast: ^8.2.1
+  common_utils_v2:
+    git:
+      url: https://github.com/ilovesshan/flutter-common-utils-v2.git
+      ref: master
+
   bruno: ^3.0.0
-  dio: ^4.0.6
-  get: ^4.6.1
-  flutter_easyloading: ^3.0.5
-  shared_preferences: ^2.0.8
   just_the_tooltip: ^0.0.11+2
   web_socket_channel: ^2.3.0
-  uuid: ^3.0.7
 
 flutter:
   uses-material-design: true

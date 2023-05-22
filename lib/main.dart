@@ -15,10 +15,6 @@ void main() async {
   Get.put(MessageController(), permanent: true);
   Get.put(SocketController(), permanent: true);
 
-  // Get.lazyPut<ChatController>(() => ChatController(), fenix: true);
-  // Get.lazyPut<MessageController>(() => MessageController());
-  // Get.lazyPut<SocketController>(() => SocketController());
-
   await SharedPreferencesUtil.initSharedPreferences();
 }
 

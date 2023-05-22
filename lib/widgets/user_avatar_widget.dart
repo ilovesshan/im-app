@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:im/util/text_util.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
 
 class UserAvatarWidget extends StatelessWidget {
   final String avatarPath;

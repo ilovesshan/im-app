@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:im/controller/socket_controller.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:im/controller/chat_controller.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+
+import 'package:im/controller/socket_controller.dart';
+import 'package:im/controller/chat_controller.dart';
 import 'package:im/model/chat_model.dart';
-import 'package:im/util/text_util.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
 class ChatPage extends StatelessWidget {
@@ -14,9 +13,6 @@ class ChatPage extends StatelessWidget {
 
   final ChatController _chatController = Get.find<ChatController>();
   final SocketController _socketController = Get.find<SocketController>();
-
-  // final ChatController _chatController = Get.put<ChatController>(ChatController());
-  // final SocketController _socketController = Get.put<SocketController>(SocketController());
 
   @override
   Widget build(BuildContext context) {

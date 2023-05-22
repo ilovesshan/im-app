@@ -1,6 +1,4 @@
 import 'package:im/model/user_model.dart';
-import 'package:im/util/text_util.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ChatModel chatModelFromJson(String str) => ChatModel.fromJson(json.decode(str));

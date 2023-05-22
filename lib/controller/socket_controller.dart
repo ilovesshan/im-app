@@ -1,18 +1,15 @@
 import 'dart:convert';
-import 'package:get/get.dart';
+
+import 'package:common_utils_v2/common_utils_v2.dart';
+
 import 'package:im/controller/chat_controller.dart';
-import 'package:uuid/uuid.dart';
-import 'package:im/util/http_helper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
+
 
 import 'message_controller.dart';
 
 class SocketController extends GetxController {
-  final channel = WebSocketChannel.connect(Uri.parse(HttpHelper.baseWsUrl));
-
-  // final ChatController _chatController = Get.put<ChatController>(ChatController());
-  // final MessageController _messageController = Get.put<MessageController>(MessageController());
+  final channel = WebSocketChannel.connect(Uri.parse(HttpHelperUtil.baseWsUrl));
 
   final ChatController _chatController = Get.find<ChatController>();
   final MessageController _messageController =  Get.find<MessageController>();
