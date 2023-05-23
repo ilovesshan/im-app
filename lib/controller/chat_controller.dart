@@ -11,9 +11,10 @@ class ChatController extends GetxController {
   late final ScrollController _scrollController = ScrollController();
   late final TextEditingController _messageTextEditingController = TextEditingController();
 
-
   List<ChatModel> get chatModel => _chatModelList;
+
   get listViewController => _scrollController;
+
   TextEditingController get messageTextEditingController => _messageTextEditingController;
 
   /// 查询聊天记录列表
@@ -26,24 +27,33 @@ class ChatController extends GetxController {
 
     /// 延迟500毫秒，再进行滑动
     Future.delayed(const Duration(milliseconds: 500), () {
-      if(_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
   }
 
   /// 发送消息
-  Future<String> sendMessage(int fid) async{
+  Future<String> sendTextMessage(int fid) async {
+    if (TextUtils.isEmpty(_messageTextEditingController.text)) {
+      ToastUtils.show("请输入发送内容");
+      return "";
+    }
     String message = _messageTextEditingController.text;
-    Map<String, Object> requestBody ={
-      "type": 0,
-      "to": fid,
-      "content": message
-    };
+    Map<String, Object> requestBody = {"type": 0, "to": fid, "content": message};
     await Api.sendMessage(requestBody);
-    // 刷新聊天记录
+    /// 刷新聊天记录
     queryChatList(fid);
     _messageTextEditingController.text = "";
     return message;
+  }
+
+  /// 发送消息
+  Future<String> sendMediaMessage({required int fid, required int type, required String mediaPath}) async {
+    Map<String, Object> requestBody = {"type": type, "to": fid, "content": mediaPath};
+    await Api.sendMessage(requestBody);
+    /// 刷新聊天记录
+    queryChatList(fid);
+    return mediaPath;
   }
 }

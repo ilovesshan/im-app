@@ -31,6 +31,8 @@ class _RootApplicationState extends State<RootApplication> with WidgetsBindingOb
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+
+    PermissionUtils.requestAllPermission();
   }
 
   @override
