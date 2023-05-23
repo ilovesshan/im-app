@@ -155,12 +155,13 @@ class _ChatPageState extends State<ChatPage>  with WidgetsBindingObserver{
                                     /// 停止录音, 上传录音信息到服务器
                                     RecordUtil.stopRecorder(onResultCallBack: (path) async {
                                       _isRecording = false;
+                                      uploadLoadMediaAndSendMessage(mediaPath: path, fid: fid!, uid: uid!, type: 3);
                                       final Map<String, dynamic> uploadResponse = await FileUploadUtil.uploadSingle(filePath: path);
                                       /// 发送聊天记录
-                                      _chatController.sendMediaMessage(fid: int.parse(fid!), type: 3, mediaPath: uploadResponse["path"]);
+                                      _chatController.sendMediaMessage(fid: int.parse(fid), type: 3, mediaPath: uploadResponse["path"]);
                                       _chatController.queryChatList(int.parse(fid));
                                       /// 通过Socket向服务器发送消息
-                                      _socketController.sendMessage(uploadResponse["path"], int.parse(uid!), int.parse(fid));
+                                      _socketController.sendMessage(uploadResponse["path"], int.parse(uid), int.parse(fid));
                                       setState(() {});
                                     });
                                   }
@@ -282,12 +283,43 @@ class _ChatPageState extends State<ChatPage>  with WidgetsBindingObserver{
                                   GestureDetector(
                                     child: Container(
                                       width: 36, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(36)),
-                                      child: Icon(Icons.send, color: Colors.white, size: 20),
+                                      child: GetBuilder<ChatController>(
+                                        init: _chatController,
+                                        builder: (_){
+                                          return Icon(_chatController.isOptionsBtn ? Icons.add_circle_outline_outlined : Icons.send, color: Colors.white, size: 20);
+                                        },
+                                      ),
                                     ),
                                     onTap: () async {
-                                      final message = await _chatController.sendTextMessage(int.parse(fid!));
-                                      /// 通过Socket向服务器发送消息
-                                      _socketController.sendMessage(message, int.parse(uid!), int.parse(fid));
+                                      if(!_chatController.isOptionsBtn){
+                                        /// 发送信息
+                                        final message = await _chatController.sendTextMessage(int.parse(fid!));
+                                        /// 通过Socket向服务器发送消息
+                                        _socketController.sendMessage(message, int.parse(uid!), int.parse(fid));
+                                      }else{
+                                        /// 弹出底部选项菜单
+                                        CommonBottomSheetSelector.show(data: FileUploadUtil.pickerOptions, onResult: (index) async {
+                                          switch(index){
+                                            case 0:
+                                              ToastUtils.show("拍照上传");
+                                              final pickPath = await ImagePickerUtil.pick(isCamera: true);
+                                              printLog(StackTrace.current, "拍照上传=====》 $pickPath");
+                                              await uploadLoadMediaAndSendMessage(mediaPath: pickPath, fid: fid!, uid: uid!, type: 2);
+                                              break;
+                                            case 1:
+                                              ToastUtils.show("相册选取");
+                                              final pickPath = await ImagePickerUtil.pick(isCamera: false);
+                                              printLog(StackTrace.current, "相册选取=====》 $pickPath");
+                                              await uploadLoadMediaAndSendMessage(mediaPath: pickPath, fid: fid!, uid: uid!, type: 2);
+                                              break;
+                                            case 2:
+                                              ToastUtils.show("取消");
+                                              break;
+                                            default:
+                                              break;
+                                          }
+                                        });
+                                      }
                                     },
                                   ),
                                 ],
@@ -305,6 +337,18 @@ class _ChatPageState extends State<ChatPage>  with WidgetsBindingObserver{
     );
   }
 
+  /// 上传图片/录音 并推送聊天记录
+  Future<void> uploadLoadMediaAndSendMessage({required String mediaPath, required String fid, required String uid, required int type}) async {
+    final Map<String, dynamic> uploadResponse = await FileUploadUtil.uploadSingle(filePath: mediaPath);
+    /// 发送聊天记录
+    _chatController.sendMediaMessage(fid: int.parse(fid), type: type, mediaPath: uploadResponse["path"]);
+    _chatController.queryChatList(int.parse(fid));
+    /// 通过Socket向服务器发送消息
+    _socketController.sendMessage(uploadResponse["path"], int.parse(uid), int.parse(fid));
+    setState(() {});
+  }
+
+  /// 开始录音
   void startRecorder() {
     RecordUtil.startRecorder(onResultCallBack: (){
       _isRecording = true;
@@ -312,6 +356,7 @@ class _ChatPageState extends State<ChatPage>  with WidgetsBindingObserver{
     });
   }
 
+  /// 播放录音
   void play() async {
     _isPlaying = true;
     setState(() {});
@@ -323,6 +368,7 @@ class _ChatPageState extends State<ChatPage>  with WidgetsBindingObserver{
     });
   }
 
+  /// 停止录音
   void stopRecorder() async {
 
   }

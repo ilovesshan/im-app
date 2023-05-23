@@ -55,17 +55,22 @@ class _RootApplicationState extends State<RootApplication> with WidgetsBindingOb
       initialBinding: ImBindings(),
       initialRoute: AppRouter.initRoute,
       getPages: AppRouter.routes(),
-      builder: (context, child) => Scaffold(
-        body: FlutterEasyLoading(
-          // Global GestureDetector that will dismiss the keyboard
-          child: GestureDetector(
-            onTap: () {
-              hideKeyboard(context);
-            },
-            child: child,
-          ),
-        ),
-      ),
+      builder: (context, child) {
+        // android状态栏为透明沉浸式
+        AppInitialize.setSystemUiOverlayStyle();
+        // 屏幕适配
+        AppInitialize.initScreenUtil(context);
+        return Scaffold(
+          body: FlutterEasyLoading(
+            // Global GestureDetector that will dismiss the keyboard
+            child: GestureDetector(
+              onTap: () {
+                hideKeyboard(context);
+              },
+              child: child,
+            ),
+          ));
+        },
     );
   }
 
