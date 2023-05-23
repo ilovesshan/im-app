@@ -38,7 +38,7 @@ class LoginController extends GetxController {
   login() async {
     /// 处理登录的业务逻辑
     if (TextUtil.isEmpty(_username) || TextUtil.isEmpty(_password)) {
-      // EasyLoading.showToast("用户名或密码不能为空");
+      ToastUtils.show("用户名或密码不能为空");
       return;
     }
     UserLoginModel loginModel = await Api.login(username, password);

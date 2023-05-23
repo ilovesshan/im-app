@@ -13,7 +13,6 @@ class SocketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("SocketController onInit...");
     channel.stream.listen((message) {
      Map<String, dynamic> responseData = json.decode(message);
      if(responseData !=null && responseData["type"] == "2"){
@@ -57,6 +56,5 @@ class SocketController extends GetxController {
   @override
   void dispose() {
     super.dispose();
-    print("SocketController 销毁...");
   }
 }

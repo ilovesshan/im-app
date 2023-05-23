@@ -84,16 +84,16 @@ class MessagePage extends StatelessWidget {
             Get.toNamed(AppRouter.addFriend);
             break;
           case "createGroup":
-            EasyLoading.showToast("创建群聊");
+           ToastUtils.show("创建群聊");
             break;
           case "addGroup":
-            EasyLoading.showToast("添加群聊");
+           ToastUtils.show("添加群聊");
            break;
           case "myCard":
-            EasyLoading.showToast("我的名片");
+           ToastUtils.show("我的名片");
             break;
           case "scan":
-            EasyLoading.showToast("扫一扫");
+           ToastUtils.show("扫一扫");
             break;
           case "logout":
             SpUtil.removeValue("token");

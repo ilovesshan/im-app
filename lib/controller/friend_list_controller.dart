@@ -11,7 +11,7 @@ class FriendListController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    // 请求好友列表
+    /// 请求好友列表
     Future.delayed(const Duration(seconds: 1),()=> queryFriendList());
   }
 

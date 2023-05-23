@@ -13,9 +13,7 @@ class NoScrollBehaviorWidget extends ScrollBehavior {
       case TargetPlatform.fuchsia:
         return GlowingOverscrollIndicator(
           axisDirection: axisDirection,
-          color: Theme
-              .of(context)
-              .accentColor,
+          color: Theme.of(context).accentColor,
           child: child,
           showTrailing: false,
           showLeading: false,);
