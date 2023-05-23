@@ -157,9 +157,11 @@ class _ChatPageState extends State<ChatPage> {
                                   RecordUtil.stopRecorder(onResultCallBack: (path) async {
                                     _isRecording = false;
                                     final Map<String, dynamic> uploadResponse = await FileUploadUtil.uploadSingle(filePath: path);
-                                    // 发送聊天记录
+                                    /// 发送聊天记录
                                     _chatController.sendMediaMessage(fid: int.parse(fid!), type: 3, mediaPath: uploadResponse["path"]);
                                     _chatController.queryChatList(int.parse(fid));
+                                    /// 通过Socket向服务器发送消息
+                                    _socketController.sendMessage(uploadResponse["path"], int.parse(uid!), int.parse(fid));
                                     setState(() {});
                                   });
                                 }
@@ -198,101 +200,101 @@ class _ChatPageState extends State<ChatPage> {
                   /// 聊天窗口 Widget
                   Offstage(
                     offstage: !_isHidden,
-                    child: Column(
-                      children: [
-                        // 聊天列表
-                        Container(
-                          width: Get.width,
-                          height: Get.height - (kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 50),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: ListView.builder(itemBuilder: (context, index) {
-                              ChatModel chatModel =  _chatController.chatModel[0];
-                              Message message = chatModel.message[index];
-                              return JustTheTooltip(
-                                backgroundColor: Color(0xff4b4c4e),
-                                showDuration: Duration(seconds: 20),
-                                child: ChatBubbleWidget(
-                                  mAvatarUrl: chatModel.muser.image,
-                                  yAvatarUrl: chatModel.yuser.image,
-                                  text:  message.type!=1 ? HttpHelperUtil.baseurl + message.content : message.content,
-                                  isCurrentUser:  message.from == int.parse(uid!),
-                                  type: message.type,
-                                ),
-                                content: Container(
-                                  width: 150,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(child: Text("撤回", style: TextStyle(color: Color(0xffd8d8da)))),
-                                        SizedBox(width: 10)
-                                        ,Text("删除", style: TextStyle(color: Color(0xffd8d8da))),
-                                        SizedBox(width: 10),
-                                        Text("复制", style: TextStyle(color: Color(0xffd8d8da))),
-                                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          /// 聊天列表
+                          Container(
+                            width: Get.width,
+                            height: Get.height - (kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 50),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: ListView.builder(itemBuilder: (context, index) {
+                                ChatModel chatModel =  _chatController.chatModel[0];
+                                Message message = chatModel.message[index];
+                                return JustTheTooltip(
+                                  backgroundColor: Color(0xff4b4c4e),
+                                  showDuration: Duration(seconds: 20),
+                                  child: ChatBubbleWidget(
+                                    mAvatarUrl: chatModel.muser.image,
+                                    yAvatarUrl: chatModel.yuser.image,
+                                    text:  message.type!=1 ? HttpHelperUtil.baseurl + message.content : message.content,
+                                    isCurrentUser:  message.from == int.parse(uid!),
+                                    type: message.type,
+                                  ),
+                                  content: Container(
+                                    width: 150,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(child: Text("撤回", style: TextStyle(color: Color(0xffd8d8da)))),
+                                          SizedBox(width: 10)
+                                          ,Text("删除", style: TextStyle(color: Color(0xffd8d8da))),
+                                          SizedBox(width: 10),
+                                          Text("复制", style: TextStyle(color: Color(0xffd8d8da))),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }, itemCount: ( _chatController.chatModel[0].message.length), controller: _chatController.listViewController,),
+                                );
+                              }, itemCount: ( _chatController.chatModel[0].message.length), controller: _chatController.listViewController,),
+                            ),
                           ),
-                        ),
 
-                        /// 发送语音按钮
-                        Container(
-                          width: Get.width,
-                          color: Colors.white,
-                          height: 50,
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                child: Container(
-                                  width: 36, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(36)),
-                                  child: Icon(Icons.mic, color: Colors.white, size: 20),
+                          /// 底部操作按钮
+                          Container(
+                            width: Get.width,
+                            color: Colors.white,
+                            height: 50,
+                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    width: 36, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(36)),
+                                    child: Icon(Icons.mic, color: Colors.white, size: 20),
+                                  ),
+                                  onTap: () async {
+                                    /// 申请权限
+                                    _isHidden = false;
+                                    setState(() {});
+                                  },
                                 ),
-                                onTap: () async {
-                                  /// 申请权限
-                                 // await PermissionUtils.requestSpeechPermission();
-                                 // await PermissionUtils.requestMicrophonePermission();
-                                 // await PermissionUtils.requestStoragePermission();
-                                  _isHidden = false;
-                                  setState(() {});
-                                },
-                              ),
 
-                              SizedBox(width: 5),
+                                SizedBox(width: 5),
 
-                              /// 文本输入框
-                              Expanded(
-                                  child: TextField(
-                                    maxLines: 4, minLines: 1, controller: _chatController.messageTextEditingController,
-                                    decoration:new InputDecoration(
-                                      contentPadding: EdgeInsets.all(8), focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Get.theme.primaryColor, width: 1.0)),
-                                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xffe2e7eb), width: 1.0)),
-                                      hintText: '',
-                                    ),
-                                  )
-                              ),
-
-                              SizedBox(width: 5),
-
-                              /// 发送按钮
-                              GestureDetector(
-                                child: Container(
-                                  width: 36, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(36)),
-                                  child: Icon(Icons.send, color: Colors.white, size: 20),
+                                /// 文本输入框
+                                Expanded(
+                                    child: TextField(
+                                      maxLines: 4, minLines: 1, controller: _chatController.messageTextEditingController,
+                                      decoration:new InputDecoration(
+                                        contentPadding: EdgeInsets.all(8), focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Get.theme.primaryColor, width: 1.0)),
+                                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xffe2e7eb), width: 1.0)),
+                                        hintText: '',
+                                      ),
+                                    )
                                 ),
-                                onTap: () async {
-                                  final message = await _chatController.sendTextMessage(int.parse(fid!));
-                                  _socketController.sendMessage(message, int.parse(uid!), int.parse(fid));
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+
+                                SizedBox(width: 5),
+
+                                /// 发送按钮
+                                GestureDetector(
+                                  child: Container(
+                                    width: 36, height: 36, alignment: Alignment.center, decoration: BoxDecoration( color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(36)),
+                                    child: Icon(Icons.send, color: Colors.white, size: 20),
+                                  ),
+                                  onTap: () async {
+                                    final message = await _chatController.sendTextMessage(int.parse(fid!));
+                                    /// 通过Socket向服务器发送消息
+                                    _socketController.sendMessage(message, int.parse(uid!), int.parse(fid));
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
               ],

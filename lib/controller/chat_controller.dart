@@ -40,7 +40,7 @@ class ChatController extends GetxController {
       return "";
     }
     String message = _messageTextEditingController.text;
-    Map<String, Object> requestBody = {"type": 0, "to": fid, "content": message};
+    Map<String, Object> requestBody = {"type": 1, "to": fid, "content": message};
     await Api.sendMessage(requestBody);
     /// 刷新聊天记录
     queryChatList(fid);
