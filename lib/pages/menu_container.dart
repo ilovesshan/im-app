@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
-import 'package:get/get.dart';
-
-import 'package:im/controller/socket_controller.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
 import 'package:im/pages/friend_page.dart';
+import 'package:im/pages/message_page.dart';
+
 import 'package:im/pages/profile.dart';
 import 'package:im/pages/world_page.dart';
 
-import 'message_page.dart';
+
 
 class MenuContainerPage extends StatefulWidget {
   const MenuContainerPage({Key? key}) : super(key: key);

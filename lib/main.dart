@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:im/controller/chat_controller.dart';
-import 'package:im/controller/message_controller.dart';
-import 'package:im/controller/socket_controller.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
 
 import 'package:im/router/app_router.dart';
-import 'package:im/util/shared_preferences_util.dart';
+import 'controller/chat_controller.dart';
+import 'controller/message_controller.dart';
+import 'controller/socket_controller.dart';
 
 void main() async {
   runApp(const RootApplication());
@@ -15,7 +12,7 @@ void main() async {
   Get.put(MessageController(), permanent: true);
   Get.put(SocketController(), permanent: true);
 
-  await SharedPreferencesUtil.initSharedPreferences();
+  await SpUtil.initSharedPreferences();
 }
 
 class RootApplication extends StatefulWidget {
@@ -43,7 +40,7 @@ class _RootApplicationState extends State<RootApplication> with WidgetsBindingOb
     } else if (state == AppLifecycleState.paused) {
       print("应用当前对用户不可见，无法响应用户输入，并运行在后台。这个事件对应于 Android 中的 `onPause()`；");
     } else if (state == AppLifecycleState.detached) {
-     final String userId =  await SpUtil.getValue("userId");
+     final String? userId =  await SpUtil.getValue("userId");
       // _socketController.logout(int.parse(userId));
     }
   }

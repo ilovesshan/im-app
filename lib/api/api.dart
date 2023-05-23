@@ -6,6 +6,7 @@ import 'package:im/model/recently_message_model.dart';
 import 'package:im/model/user_login_model.dart';
 import 'package:im/model/user_model.dart';
 
+
 class Api {
   static const String loginPath = "/login";
   static const String friend = "/friend";

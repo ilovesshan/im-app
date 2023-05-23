@@ -1,11 +1,7 @@
 import 'dart:convert';
-
 import 'package:common_utils_v2/common_utils_v2.dart';
 
 import 'package:im/controller/chat_controller.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
-
 import 'message_controller.dart';
 
 class SocketController extends GetxController {

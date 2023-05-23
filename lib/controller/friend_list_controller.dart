@@ -1,4 +1,5 @@
-import 'package:get/get.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
+
 import 'package:im/api/api.dart';
 import 'package:im/model/friend_model.dart';
 

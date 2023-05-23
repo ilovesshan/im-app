@@ -13,21 +13,17 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  common_utils_v2:
+    path: ./flutter-common-utils-v2
+
+  bruno: ^3.0.0
+  # percent_indicator: 4.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^1.0.0
 
-  common_utils_v2:
-    git:
-      url: https://github.com/ilovesshan/flutter-common-utils-v2.git
-      ref: master
-
-  bruno: ^3.0.0
-  just_the_tooltip: ^0.0.11+2
-  web_socket_channel: ^2.3.0
 
 flutter:
   uses-material-design: true

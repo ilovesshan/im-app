@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
 import 'package:im/controller/add_friend_controller.dart';
-import 'package:im/controller/friend_list_controller.dart';
 import 'package:im/model/user_model.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 

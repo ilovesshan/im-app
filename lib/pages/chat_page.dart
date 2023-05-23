@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:common_utils_v2/common_utils_v2.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 
-
-import 'package:im/controller/socket_controller.dart';
 import 'package:im/controller/chat_controller.dart';
+import 'package:im/controller/socket_controller.dart';
 import 'package:im/model/chat_model.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
+
+
 
 class ChatPage extends StatelessWidget {
   ChatPage({Key? key}) : super(key: key);
@@ -135,7 +134,7 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: isCurrentUser? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtils.isEmptyWith(yNickname, "IM"), radius: 20): SizedBox(width: 40),
+          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtil.isEmptyWith(yNickname, "IM"), radius: 20): SizedBox(width: 40),
 
           Expanded(
             child: Wrap(
@@ -153,7 +152,7 @@ class ChatBubble extends StatelessWidget {
              ],
             ),
           ),
-          isCurrentUser ? UserAvatarWidget(avatarPath:  mAvatarUrl, avatarName: TextUtils.isEmptyWith(mNickname, "IM"), radius: 20): SizedBox(width: 40),
+          isCurrentUser ? UserAvatarWidget(avatarPath:  mAvatarUrl, avatarName: TextUtil.isEmptyWith(mNickname, "IM"), radius: 20): SizedBox(width: 40),
         ],
       ),
     );

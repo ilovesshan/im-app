@@ -1,8 +1,8 @@
-import 'package:get/get.dart';
+import 'package:common_utils_v2/common_utils_v2.dart';
+
 import 'package:im/api/api.dart';
 import 'package:im/model/recently_message_model.dart';
 import 'package:im/model/user_model.dart';
-import 'package:im/util/shared_preferences_util.dart';
 
 class MessageController extends GetxController {
   final UserModel  _userModel = UserModel(id: 0, username: "IM", image: "");
@@ -24,13 +24,13 @@ class MessageController extends GetxController {
 
   /// 获取当前用户数据
   queryUserInfo() async {
-    final String userId = await SpUtil.getValue("userId");
-    final String username = await SpUtil.getValue("username");
-    final String image = await SpUtil.getValue("image");
+    final String? userId = await SpUtil.getValue("userId");
+    final String? username = await SpUtil.getValue("username");
+    final String? image = await SpUtil.getValue("image");
 
-    _userModel.id = int.parse(userId);
-    _userModel.username = username;
-    _userModel.image = image;
+    _userModel.id = int.parse(userId!);
+    _userModel.username = username!;
+    _userModel.image = image!;
 
     /// 更新UI
     update();
