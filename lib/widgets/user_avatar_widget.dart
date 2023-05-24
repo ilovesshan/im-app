@@ -16,7 +16,7 @@ class UserAvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center, width: 49, height: 49,
-      child: TextUtils.isNotEmpty(avatarPath)
+      child: TextUtil.isNotEmpty(avatarPath)
           ? ClipRRect(child: Image.network(avatarPath, width: 39, height: 39, fit: BoxFit.fill), borderRadius: BorderRadius.circular(radius))
           : ClipRRect(child: Container( alignment: Alignment.center,width: 39, height: 39, color: Get.theme.primaryColor, child: Text(avatarName.substring(0,1), style: const TextStyle(fontSize: 20, color: Colors.white))), borderRadius: BorderRadius.circular(radius))
     );

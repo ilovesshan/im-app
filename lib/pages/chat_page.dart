@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/constants.dart' as MtConstants;
 
 import 'package:common_utils_v2/common_utils_v2.dart';
 
@@ -90,7 +91,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                   GestureDetector(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.height - (kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 60),
+                                      height: MediaQuery.of(context).size.height - (MtConstants.kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 60),
                                       color: Colors.black.withOpacity(0.2),
                                       child: Center(
                                         child: Column(
@@ -147,7 +148,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                       _bottomWidgetText = "按住说话";
                                       _microphoneIconText = "按住说话";
                                       if (_fingerInCancelWidget) {
-                                        Fluttertoast.showToast(msg: "取消...");
+                                        ToastUtil.show( "取消...");
                                       } else {
                                         /// 停止录音, 上传录音信息到服务器
                                         RecordUtil.stopRecorder(onResultCallBack: (path) async {
@@ -206,7 +207,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                 Container(
                                   width: Get.width,
                                   // 327
-                                  height: Get.height - (kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 60),
+                                  height: Get.height - (MtConstants.kToolbarHeight + MediaQueryData.fromWindow(window).padding.top + 60),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: ListView.builder(
@@ -323,16 +324,16 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                                                   await uploadLoadMediaAndSendMessage(mediaPath: pickPath, fid: fid!, uid: uid!, type: 2);
                                                   break;
                                                 case "3":
-                                                  ToastUtils.show("语音通话");
+                                                  ToastUtil.show("语音通话");
                                                   break;
                                                 case "4":
-                                                  ToastUtils.show("视频通话");
+                                                  ToastUtil.show("视频通话");
                                                   break;
                                                 case "5":
-                                                  ToastUtils.show("发红包");
+                                                  ToastUtil.show("发红包");
                                                   break;
                                                 case "6":
-                                                  ToastUtils.show("戳一戳");
+                                                  ToastUtil.show("戳一戳");
                                                   break;
                                               }
                                             });
@@ -379,7 +380,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     _isPlaying = true;
     setState(() {});
     RecordUtil.playRecorder(onResultCallBack: () {
-      Fluttertoast.showToast(msg: "播放结束");
+      ToastUtil.show( "播放结束");
       _isPlaying = false;
       RecordUtil.closeAudioSession();
       setState(() {});

@@ -1,7 +1,6 @@
 import 'package:common_utils_v2/common_utils_v2.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
 class ChatBubbleWidget extends StatelessWidget {
@@ -28,7 +27,7 @@ class ChatBubbleWidget extends StatelessWidget {
         crossAxisAlignment: type == 2 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         mainAxisAlignment: isCurrentUser? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtils.isEmptyWith(yNickname, "IM"), radius: 20): SizedBox(width: 40),
+          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtil.isEmptyWith(yNickname, "IM"), radius: 20): SizedBox(width: 40),
           Expanded(
             child: Wrap(
               alignment: isCurrentUser?  WrapAlignment.end : WrapAlignment.start,
@@ -37,7 +36,7 @@ class ChatBubbleWidget extends StatelessWidget {
               ],
             ),
           ),
-          isCurrentUser ? UserAvatarWidget(avatarPath:  mAvatarUrl, avatarName: TextUtils.isEmptyWith(mNickname, "IM"), radius: 20): SizedBox(width: 40),
+          isCurrentUser ? UserAvatarWidget(avatarPath:  mAvatarUrl, avatarName: TextUtil.isEmptyWith(mNickname, "IM"), radius: 20): SizedBox(width: 40),
         ],
       ),
     );
@@ -78,9 +77,9 @@ class ChatBubbleWidget extends StatelessWidget {
         ),
         onTap: () async {
           final path = await FileDownloadUtil.downLoadFile(text);
-          Fluttertoast.showToast(msg: "开始播放");
+          ToastUtil.show( "开始播放");
           RecordUtil.playRecorder(recordSourcesPath: path, onResultCallBack: (){
-            Fluttertoast.showToast(msg: "播放结束");
+            ToastUtil.show( "播放结束");
           });
         },
       );

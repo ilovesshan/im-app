@@ -24,7 +24,7 @@ class AddFriendListController extends GetxController {
   /// 添加用户
   void addFriend(int id) async {
     await Api.addFriend(id);
-    ToastUtils.show("请求已发送，等待对方同意");
+    ToastUtil.show("请求已发送，等待对方同意");
     Get.back();
   }
 }

@@ -38,7 +38,7 @@ class FriendPage extends StatelessWidget {
             child: Column(
               children: [
                 buildFriendFunctionItem(Icons.person_add_outlined, "新的好友",()=>Get.toNamed(AppRouter.friendApply)!.then((value) => _friendListController.queryFriendList())),
-                buildFriendFunctionItem(Icons.group_add_outlined, "群通知",()=>ToastUtils.show("群通知"))
+                buildFriendFunctionItem(Icons.group_add_outlined, "群通知",()=>ToastUtil.show("群通知"))
               ],
             ),
           ),
@@ -115,10 +115,10 @@ class FriendPage extends StatelessWidget {
             Get.toNamed(AppRouter.addFriend);
             break;
           case "scan":
-           ToastUtils.show("扫一扫");
+           ToastUtil.show("扫一扫");
             break;
           case "myCard":
-           ToastUtils.show("我的名片");
+           ToastUtil.show("我的名片");
             break;
         }
       },

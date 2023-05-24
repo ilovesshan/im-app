@@ -52,8 +52,8 @@ class ChatController extends GetxController {
 
   /// 发送消息
   Future<String> sendTextMessage(int fid) async {
-    if (TextUtils.isEmpty(_messageTextEditingController.text)) {
-      ToastUtils.show("请输入发送内容");
+    if (TextUtil.isEmpty(_messageTextEditingController.text)) {
+      ToastUtil.show("请输入发送内容");
       return "";
     }
     String message = _messageTextEditingController.text;

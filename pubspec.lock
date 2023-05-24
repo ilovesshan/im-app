@@ -109,9 +109,11 @@ packages:
   common_utils_v2:
     dependency: "direct main"
     description:
-      path: flutter-common-utils-v2
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: a22b847ea7e762dbf89780baa55c2e2206dd2e16
+      url: "https://github.com/ilovesshan/flutter-common-utils-v2.git"
+    source: git
     version: "0.0.1"
   connectivity:
     dependency: transitive
@@ -272,6 +274,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.2"
+  flutter_keyboard_visibility:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.0.3"
+  flutter_keyboard_visibility_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
+  flutter_keyboard_visibility_web:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

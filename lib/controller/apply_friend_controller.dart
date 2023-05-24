@@ -30,14 +30,14 @@ class ApplyFriendListController extends GetxController {
   /// 同意好友申请
   void agreeFriendApply(int id) async {
     await Api.agreeOrRefuseFriendApply("1", id);
-    ToastUtils.show("已同意");
+    ToastUtil.show("已同意");
     queryFriendApplyList();
   }
 
   /// 拒绝好友申请
   void refuseFriendApply(int id) async {
     await Api.agreeOrRefuseFriendApply("2", id);
-    ToastUtils.show("已拒绝");
+    ToastUtil.show("已拒绝");
     queryFriendApplyList();
   }
 }
