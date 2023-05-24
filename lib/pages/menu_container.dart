@@ -10,15 +10,15 @@ import 'package:im/pages/world_page.dart';
 
 
 
-class MenuContainerPage extends StatefulWidget {
+class MenuContainerPage extends StatefulWidget{
   const MenuContainerPage({Key? key}) : super(key: key);
   @override
   State<MenuContainerPage> createState() => _MenuContainerPageState();
 }
 
-class _MenuContainerPageState extends State<MenuContainerPage> {
+class _MenuContainerPageState extends State<MenuContainerPage> with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
-  final PageController _pageController = PageController();
+  late TabController _tabController;
 
   final List<BrnBottomTabBarItem> _brnBottomTabBarItem = [
     BrnBottomTabBarItem(icon: Icon(Icons.message_outlined), title: Text("消息")),
@@ -30,21 +30,29 @@ class _MenuContainerPageState extends State<MenuContainerPage> {
   final List<Widget> _pages = [MessagePage(), FriendPage(), WorldPage(), ProfilePage()];
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _brnBottomTabBarItem.length, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            _currentIndex = index;
-            setState(() {});
-          },
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _tabController,
+          // controller: _pageController,
+          // onPageChanged: (index) {
+          //   _currentIndex = index;
+          //   setState(() {});
+          // },
           children: _pages,
         ),
         bottomNavigationBar: BrnBottomTabBar(
           fixedColor: Colors.blue,
           currentIndex: _currentIndex,
           onTap: (index) {
-            _pageController.jumpToPage(index);
+            _tabController.animateTo(index);
             _currentIndex = index;
             setState(() {});
           },
