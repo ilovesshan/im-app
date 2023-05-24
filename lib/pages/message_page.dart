@@ -24,26 +24,23 @@ class MessagePage extends StatelessWidget {
         elevation: 2,
         title: GetBuilder<MessageController>(
           init: _messageController,
-          builder: (_){
-            return Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+          builder: (_) {
+            return Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              Text(_messageController.userModel.username, style: TextStyle(color: Colors.black)),
+              SizedBox(width: 10),
+              Row(
                 children: [
-                  Text(_messageController.userModel.username,style: TextStyle(color: Colors.black)),
-                  SizedBox(width: 10),
-                  Row(
-                    children: [
-                      ClipRRect(child: Container(width: 8, height: 8, color: Colors.green), borderRadius: BorderRadius.circular(10)),
-                      SizedBox(width: 4),
-                      Text("在线",style: TextStyle(color: Colors.black, fontSize: 12)),
-                    ],
-                  )
-                ]
-            );
+                  ClipRRect(child: Container(width: 8, height: 8, color: Colors.green), borderRadius: BorderRadius.circular(10)),
+                  SizedBox(width: 4),
+                  Text("在线", style: TextStyle(color: Colors.black, fontSize: 12)),
+                ],
+              )
+            ]);
           },
         ),
         leading: GetBuilder<MessageController>(
           init: _messageController,
-          builder: (_){
+          builder: (_) {
             return UserAvatarWidget(radius: 20, avatarName: _messageController.userModel.username, avatarPath: _messageController.userModel.image);
           },
         ),
@@ -52,24 +49,33 @@ class MessagePage extends StatelessWidget {
       ),
       body: GetBuilder<MessageController>(
         init: _messageController,
-        builder: (_){
-          return ListView.builder(itemBuilder: (context, index){
-            final RecentlyMessageModel recentlyMessageModel =  _messageController.recentlyMessageModelList[index];
-            final UserModel userModel = _messageController.userModel;
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: RecentlyMessageItem(recentlyMessageModel:_messageController.recentlyMessageModelList[index]),
-              onTap: (){
-                int fid = recentlyMessageModel.to;
-                if(userModel.id == recentlyMessageModel.to){
-                  fid =  recentlyMessageModel.from;
-                }
-                final targetPath = "${AppRouter.chat}?fid=$fid&uid=${userModel.id}&name=${recentlyMessageModel.username}";
-                Get.toNamed(targetPath)!.then((value) => {
-                  _messageController.queryRecentlyMessageList()
-                });
-              });
-          }, itemCount: _messageController.recentlyMessageModelList.length);
+        builder: (_) {
+          return EasyRefresh(
+            header: CustomRefreshHeader(),
+            footer: CustomRefreshFooter(),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final RecentlyMessageModel recentlyMessageModel = _messageController.recentlyMessageModelList[index];
+                final UserModel userModel = _messageController.userModel;
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: RecentlyMessageItem(recentlyMessageModel: _messageController.recentlyMessageModelList[index]),
+                  onTap: () {
+                    int fid = recentlyMessageModel.to;
+                    if (userModel.id == recentlyMessageModel.to) {
+                      fid = recentlyMessageModel.from;
+                    }
+                    final targetPath = "${AppRouter.chat}?fid=$fid&uid=${userModel.id}&name=${recentlyMessageModel.username}";
+                    Get.toNamed(targetPath)!.then((value) => {_messageController.queryRecentlyMessageList()});
+                  },
+                );
+              },
+              itemCount: _messageController.recentlyMessageModelList.length,
+            ),
+            onRefresh: () async {
+              await _messageController.queryRecentlyMessageList();
+            },
+          );
         },
       ),
     );
@@ -79,21 +85,21 @@ class MessagePage extends StatelessWidget {
     return PopupMenuButton<String>(
       icon: Icon(Icons.more_vert_outlined, color: Colors.black),
       onSelected: (value) {
-        switch(value){
+        switch (value) {
           case "addFriend":
             Get.toNamed(AppRouter.addFriend);
             break;
           case "createGroup":
-           ToastUtil.show("创建群聊");
+            ToastUtil.show("创建群聊");
             break;
           case "addGroup":
-           ToastUtil.show("添加群聊");
-           break;
+            ToastUtil.show("添加群聊");
+            break;
           case "myCard":
-           ToastUtil.show("我的名片");
+            ToastUtil.show("我的名片");
             break;
           case "scan":
-           ToastUtil.show("扫一扫");
+            ToastUtil.show("扫一扫");
             break;
           case "logout":
             SpUtil.removeValue("token");

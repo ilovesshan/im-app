@@ -7,11 +7,10 @@ import 'package:im/model/friend_model.dart';
 import 'package:im/router/app_router.dart';
 import 'package:im/widgets/user_avatar_widget.dart';
 
-
 class FriendPage extends StatelessWidget {
   FriendPage({Key? key}) : super(key: key);
 
-  FriendListController _friendListController = Get.put(FriendListController());
+  final FriendListController _friendListController = Get.put(FriendListController());
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +18,10 @@ class FriendPage extends StatelessWidget {
       backgroundColor: Color(0xfffafafa),
       appBar: AppBar(
         elevation: 2,
-        title: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text("朋友",style: TextStyle(color: Get.theme.primaryColor)),
-              SizedBox(width: 10),
-            ]
-        ),
+        title: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text("朋友", style: TextStyle(color: Get.theme.primaryColor)),
+          SizedBox(width: 10),
+        ]),
         backgroundColor: Colors.white,
         actions: [buildPopupMenuButton()],
       ),
@@ -34,34 +30,45 @@ class FriendPage extends StatelessWidget {
         children: [
           Container(
             color: Colors.white,
-            padding:EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               children: [
-                buildFriendFunctionItem(Icons.person_add_outlined, "新的好友",()=>Get.toNamed(AppRouter.friendApply)!.then((value) => _friendListController.queryFriendList())),
-                buildFriendFunctionItem(Icons.group_add_outlined, "群通知",()=>ToastUtil.show("群通知"))
+                buildFriendFunctionItem(Icons.person_add_outlined, "新的好友", () => Get.toNamed(AppRouter.friendApply)!.then((value) => _friendListController.queryFriendList())),
+                buildFriendFunctionItem(Icons.group_add_outlined, "群通知", () => ToastUtil.show("群通知"))
               ],
             ),
           ),
-
           SizedBox(height: 5),
           Padding(padding: EdgeInsets.only(left: 10), child: Text("联系人列表")),
           SizedBox(height: 5),
-
           Expanded(
             flex: 1,
             child: Container(
               color: Colors.white,
-              padding:EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: GetBuilder<FriendListController>(
                 init: _friendListController,
-                builder: (_friendController){
-                  return  ListView.builder(itemBuilder: (context, index){
-                    FriendModel friendModel =  _friendController.friendsList[index];
-                    return GestureDetector(child: buildFriendListItem(friendModel), onTap: () async {
-                      final String? userId = await SpUtil.getValue("userId");
-                      Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=$userId&name=${friendModel.username}");
-                    });
-                  }, itemCount: _friendController.friendsList.length);
+                builder: (_friendController) {
+                  return EasyRefresh(
+                    header: CustomRefreshHeader(),
+                    footer: CustomRefreshFooter(),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        FriendModel friendModel = _friendController.friendsList[index];
+                        return GestureDetector(
+                          child: buildFriendListItem(friendModel),
+                          onTap: () async {
+                            final String? userId = await SpUtil.getValue("userId");
+                            Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=$userId&name=${friendModel.username}");
+                          },
+                        );
+                      },
+                      itemCount: _friendController.friendsList.length,
+                    ),
+                    onRefresh: () async {
+                      await _friendListController.queryFriendList();
+                    },
+                  );
                 },
               ),
             ),
@@ -84,7 +91,7 @@ class FriendPage extends StatelessWidget {
     );
   }
 
-  Widget buildFriendFunctionItem( IconData iconData, String text,Function onClick) {
+  Widget buildFriendFunctionItem(IconData iconData, String text, Function onClick) {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
@@ -93,7 +100,9 @@ class FriendPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width:40, height: 40, decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.green),
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.green),
               child: Icon(iconData, color: Colors.white),
             ),
             SizedBox(width: 20),
@@ -102,7 +111,7 @@ class FriendPage extends StatelessWidget {
           ],
         ),
       ),
-      onTap: ()=> onClick(),
+      onTap: () => onClick(),
     );
   }
 
@@ -110,15 +119,15 @@ class FriendPage extends StatelessWidget {
     return PopupMenuButton<String>(
       icon: Icon(Icons.add_circle_outline_outlined, color: Colors.black),
       onSelected: (value) {
-        switch(value){
+        switch (value) {
           case "addFriend":
             Get.toNamed(AppRouter.addFriend);
             break;
           case "scan":
-           ToastUtil.show("扫一扫");
+            ToastUtil.show("扫一扫");
             break;
           case "myCard":
-           ToastUtil.show("我的名片");
+            ToastUtil.show("我的名片");
             break;
         }
       },

@@ -12,16 +12,6 @@ class MessageController extends GetxController {
   List<RecentlyMessageModel> get recentlyMessageModelList => _recentlyMessageModelList;
 
 
-  @override
-  void onInit() async {
-    super.onInit();
-    /// 获取当前用户数据
-    // queryUserInfo();
-
-    /// 查询全部好友最近一条聊天记录
-    // queryRecentlyMessageList();
-  }
-
   /// 获取当前用户数据
   queryUserInfo() async {
     final String? userId = await SpUtil.getValue("userId");
@@ -38,7 +28,7 @@ class MessageController extends GetxController {
 
 
   /// 查询全部好友最近一条聊天记录
-  void queryRecentlyMessageList() async {
+   Future<void> queryRecentlyMessageList() async {
     final List<RecentlyMessageModel> recentlyMessageModelList = await Api.queryRecentlyMessageList();
     _recentlyMessageModelList.clear();
     _recentlyMessageModelList.addAll(recentlyMessageModelList);
