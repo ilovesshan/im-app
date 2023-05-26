@@ -17,11 +17,14 @@ class SocketController extends GetxController {
         String? fid = responseData["fid"];
 
         /// 获取对应Controller
-        final ChatController _chatController = Get.find<ChatController>();
-        final MessageController _messageController = Get.find<MessageController>();
+        final ChatController _chatController = Get.put(ChatController());
+        final MessageController _messageController = Get.put(MessageController());
 
         /// 更新消息(聊天记录界面)
-        _chatController.queryChatList(int.parse(fid!));
+        String? userId = SpUtil.getValue("userId");
+        if (userId != fid) {
+          _chatController.queryChatList(int.parse(fid!));
+        }
 
         /// 更新消息(首页界面)
         _messageController.queryRecentlyMessageList();
