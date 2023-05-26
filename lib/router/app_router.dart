@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:im/pages/add_friend_page.dart';
 import 'package:im/pages/chat_page.dart';
@@ -14,16 +16,29 @@ class AppRouter {
   static const String addFriend = "/addFriend";
   static const String friendApply = "/friendApply";
 
-
+  /// 路由表
   static List<GetPage> routes() {
     return [
-      GetPage(name: login, page: () =>  LoginPage()),
-      GetPage(name: menuContainer, page: () =>  MenuContainerPage()),
+      GetPage(name: login, page: () => LoginPage()),
+      GetPage(name: menuContainer, page: () => MenuContainerPage()),
       GetPage(name: chat, page: () => ChatPage()),
-      GetPage(name: addFriend, page: () =>  AddFriendPage()),
-      GetPage(name: friendApply, page: () =>  FriendApplyPage()),
+      GetPage(name: addFriend, page: () => AddFriendPage()),
+      GetPage(name: friendApply, page: () => FriendApplyPage()),
     ];
   }
 
-  static onUnknownRoute() {}
+  /// 404路由
+  static Route<dynamic>? onUnknownRoute(RouteSettings routeSettings) {
+    return MaterialPageRoute<void>(
+      settings: routeSettings,
+      builder: (BuildContext context) => const Scaffold(body: Center(child: Text('Not Found'))),
+    );
+  }
+
+  /// 路由拦截
+  static ValueChanged<Routing?>? routingCallback(Routing routing) {
+    if (routing.current == AppRouter.menuContainer) {
+      /// 做业务处理...
+    }
+  }
 }

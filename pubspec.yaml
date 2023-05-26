@@ -14,13 +14,10 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-#  common_utils_v2:
-#    path: ./flutter-common-utils-v2
-
   common_utils_v2:
     git:
       url: https://github.com/ilovesshan/flutter-common-utils-v2.git
-      ref: master
+      ref: 4c2d767
 
   bruno: ^3.0.0
 
