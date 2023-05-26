@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:common_utils_v2/common_utils_v2.dart';
@@ -13,7 +15,11 @@ void main() async {
   /// 覆盖HttpHelperUtil的默认BaseUrl地址
   HttpHelperUtil.updateBaseUrl(baseurl: "https://43967714.cpolar.io", baseWsUrl: "ws://7bb8c5be.cpolar.io/ws");
 
-  runApp(const RootApplication());
+  /// 添加Flutter全局异常捕获
+  runZonedGuarded(() => runApp(const RootApplication()), (Object error, StackTrace stack) {
+    /// 没有被代码catch到的异常
+    Log.e(error.toString(), error, stack);
+  });
 
   /// 初始化 SharedPreferences(可选)
   await SpUtil.initSharedPreferences();
