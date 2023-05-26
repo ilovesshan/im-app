@@ -10,6 +10,7 @@ import 'package:im/widgets/user_avatar_widget.dart';
 class FriendPage extends StatelessWidget {
   FriendPage({Key? key}) : super(key: key);
   final FriendListController _friendListController = Get.put(FriendListController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,31 +45,26 @@ class FriendPage extends StatelessWidget {
             child: Container(
               color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: GetBuilder<FriendListController>(
-                init: _friendListController,
-                builder: (_friendController) {
-                  return EasyRefresh(
-                    header: CustomRefreshHeader(),
-                    footer: CustomRefreshFooter(),
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        FriendModel friendModel = _friendController.friendsList[index];
-                        return GestureDetector(
-                          child: buildFriendListItem(friendModel),
-                          onTap: () async {
-                            final String? userId = await SpUtil.getValue("userId");
-                            Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=$userId&name=${friendModel.username}");
-                          },
-                        );
+              child: Obx(()=> EasyRefresh(
+                header: CustomRefreshHeader(),
+                footer: CustomRefreshFooter(),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    FriendModel friendModel = _friendListController.friendsList[index];
+                    return GestureDetector(
+                      child: buildFriendListItem(friendModel),
+                      onTap: () async {
+                        final String? userId = await SpUtil.getValue("userId");
+                        Get.toNamed("${AppRouter.chat}?fid=${friendModel.id}&uid=$userId&name=${friendModel.username}");
                       },
-                      itemCount: _friendController.friendsList.length,
-                    ),
-                    onRefresh: () async {
-                      await _friendListController.queryFriendList();
-                    },
-                  );
+                    );
+                  },
+                  itemCount: _friendListController.friendsList.length,
+                ),
+                onRefresh: () async {
+                  await _friendListController.queryFriendList();
                 },
-              ),
+              )),
             ),
           )
         ],

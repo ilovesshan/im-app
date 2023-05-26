@@ -1,58 +1,42 @@
 import 'package:flutter/material.dart';
-
 import 'package:common_utils_v2/common_utils_v2.dart';
 
 import 'package:im/api/api.dart';
 import 'package:im/controller/socket_controller.dart';
 import 'package:im/model/user_login_model.dart';
-import 'package:im/router/app_router.dart';
-
 
 class LoginController extends GetxController {
-  final SocketController _socketController = Get.put<SocketController>(SocketController());
+  /// 用户名 EditingController
+  late final TextEditingController _usernameTextEditingController = TextEditingController(text: "ilovesshan");
 
-  /// 用户名
-  var _username = "ilovesshan";
-  /// 密码
-  var _password = "123456";
-
-  late TextEditingController _usernameTextEditingController;
-  late TextEditingController _passwordTextEditingController;
-
-  get username => _username;
-  get password => _password;
+  /// 密码 EditingController
+  late final TextEditingController _passwordTextEditingController = TextEditingController(text: "123456");
 
   TextEditingController get usernameTextEditingController => _usernameTextEditingController;
   TextEditingController get passwordTextEditingController => _passwordTextEditingController;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _usernameTextEditingController = TextEditingController(text: _username);
-    _passwordTextEditingController = TextEditingController(text: _password);
 
-    _usernameTextEditingController.addListener(() => _username = _usernameTextEditingController.text);
-    _passwordTextEditingController.addListener(() => _password = _passwordTextEditingController.text);
-  }
+  /// 处理登录逻辑
+  Future<void> login() async {
+    String username = usernameTextEditingController.text;
+    String password = passwordTextEditingController.text;
 
-  login() async {
     /// 处理登录的业务逻辑
-    if (TextUtil.isEmpty(_username) || TextUtil.isEmpty(_password)) {
+    if (TextUtil.isEmpty(username) || TextUtil.isEmpty(password)) {
       ToastUtil.show("用户名或密码不能为空");
       return;
     }
     UserLoginModel loginModel = await Api.login(username, password);
 
-    // 保存用户信息
+    /// 保存用户信息
     SpUtil.setValue("token", loginModel.token);
     SpUtil.setValue("userId", "${loginModel.user.id}");
     SpUtil.setValue("username", loginModel.user.username);
     SpUtil.setValue("image", loginModel.user.image);
 
-    // 跳转到首页
-    Get.offNamed(AppRouter.menuContainer);
-
-    // 发送消息给服务器 当前用户上线了
+    // TODO: 应该由服务端主动推送（后期优化）
+    /// 给服务器发送消息 当前用户上线了
+    final SocketController _socketController = Get.find<SocketController>();
     _socketController.userLogin(loginModel.user.id);
   }
 }

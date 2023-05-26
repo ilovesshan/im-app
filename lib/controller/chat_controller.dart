@@ -136,6 +136,7 @@ class ChatController extends GetxController {
     /// 刷新聊天记录
     queryChatList(int.parse(fid));
 
+    // TODO: 应该由服务端主动推送（后期优化）
     /// 通过Socket向服务器发送消息
     final SocketController _socketController = Get.find<SocketController>();
     _socketController.sendMessage(_messageTextEditingController.text, int.parse(uid), int.parse(fid));
@@ -186,15 +187,6 @@ class ChatController extends GetxController {
       RecordUtil.stopRecorder(onResultCallBack: (path) async {
         _isRecording.value = false;
         uploadLoadMediaAndSendMessage(mediaPath: path, type: 3);
-        // final Map<String, dynamic> uploadResponse = await FileUploadUtil.uploadSingle(filePath: path);
-        // /// 发送聊天记录
-        // final ChatController _chatController = Get.find<ChatController>();
-        // _chatController.sendMediaMessage(fid: int.parse(fid), type: 3, mediaPath: uploadResponse["path"]);
-        // _chatController.queryChatList(int.parse(fid));
-        //
-        // /// 通过Socket向服务器发送消息
-        // final SocketController _socketController = Get.find<SocketController>();
-        // _socketController.sendMessage(uploadResponse["path"], int.parse(uid), int.parse(fid));
       });
     }
   }
@@ -208,6 +200,7 @@ class ChatController extends GetxController {
     _chatController.sendMediaMessage(fid: int.parse(fid), type: type, mediaPath: uploadResponse["path"]);
     _chatController.queryChatList(int.parse(fid));
 
+    // TODO: 应该由服务端主动推送（后期优化）
     /// 通过Socket向服务器发送消息
     final SocketController _socketController = Get.find<SocketController>();
     _socketController.sendMessage(uploadResponse["path"], int.parse(uid), int.parse(fid));

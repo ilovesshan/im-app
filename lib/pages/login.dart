@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
 import 'package:common_utils_v2/common_utils_v2.dart';
 
-
 import 'package:im/controller/login_controller.dart';
-
+import 'package:im/router/app_router.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -21,17 +20,21 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-           Text("HI, Welcome To IM World~", style: TextStyle(fontSize: 24, color: Get.theme.primaryColor, fontWeight: FontWeight.bold)),
+            Text("HI, Welcome To IM World~", style: TextStyle(fontSize: 24, color: Get.theme.primaryColor, fontWeight: FontWeight.bold)),
             const SizedBox(height: 160),
             BrnTextInputFormItem(title: "用户名", controller: loginController.usernameTextEditingController),
             const SizedBox(height: 20),
-            BrnTextInputFormItem(title: "密码", controller:  loginController.passwordTextEditingController, inputType: BrnInputType .pwd),
+            BrnTextInputFormItem(title: "密码", controller: loginController.passwordTextEditingController, inputType: BrnInputType.pwd),
             const SizedBox(height: 40),
             BrnBigMainButton(
               title: '登录',
-              onTap: () {
-                loginController.login();
-                // Get.offNamed(AppRouter.menuContainer);
+              onTap: () async {
+                BrnLoadingDialog.show(context);
+                await loginController.login();
+                BrnLoadingDialog.dismiss(context);
+
+                /// 跳转到首页
+                Get.offAllNamed(AppRouter.menuContainer);
               },
             )
           ],

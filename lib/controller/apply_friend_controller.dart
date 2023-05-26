@@ -6,16 +6,15 @@ import 'package:im/api/api.dart';
 import 'package:im/model/user_model.dart';
 
 class ApplyFriendListController extends GetxController {
-  final List<UserModel> _applyUserList = [];
-  late TextEditingController _kwTextEditingController = TextEditingController();
+  final List<UserModel> _applyUserList = <UserModel>[].obs;
+  late final TextEditingController _kwTextEditingController = TextEditingController();
 
   List<UserModel> get applyUserList => _applyUserList;
-
   TextEditingController get kwTextEditingController => _kwTextEditingController;
-
 
   @override
   void onInit() {
+    super.onInit();
     queryFriendApplyList();
   }
 
@@ -24,20 +23,17 @@ class ApplyFriendListController extends GetxController {
     final List<UserModel> friendModelList = await Api.queryFriendApplyList();
     _applyUserList.clear();
     _applyUserList.addAll(friendModelList);
-    update();
   }
 
   /// 同意好友申请
-  void agreeFriendApply(int id) async {
+  Future<void> agreeFriendApply(int id) async {
     await Api.agreeOrRefuseFriendApply("1", id);
-    ToastUtil.show("已同意");
     queryFriendApplyList();
   }
 
   /// 拒绝好友申请
-  void refuseFriendApply(int id) async {
+  Future<void> refuseFriendApply(int id) async {
     await Api.agreeOrRefuseFriendApply("2", id);
-    ToastUtil.show("已拒绝");
     queryFriendApplyList();
   }
 }
