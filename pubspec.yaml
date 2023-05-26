@@ -17,7 +17,7 @@ dependencies:
   common_utils_v2:
     git:
       url: https://github.com/ilovesshan/flutter-common-utils-v2.git
-      ref: 4c2d767
+      ref: master
 
   bruno: ^3.0.0
 

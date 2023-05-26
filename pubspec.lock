@@ -117,7 +117,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4c2d767"
+      ref: master
       resolved-ref: "4c2d76713ab08430c5fa91167856d5101b9510a2"
       url: "https://github.com/ilovesshan/flutter-common-utils-v2.git"
     source: git
