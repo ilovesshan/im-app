@@ -54,7 +54,7 @@ class ChatBubbleWidget extends StatelessWidget {
       // 图片
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 6),
-        padding: EdgeInsets.all(4),
+        padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isCurrentUser ? Theme.of(context).primaryColor : Color(0xffe2e7eb),
           borderRadius: BorderRadius.circular(6),

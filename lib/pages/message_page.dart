@@ -11,7 +11,7 @@ import 'package:im/widgets/user_avatar_widget.dart';
 
 class MessagePage extends StatelessWidget {
   MessagePage({Key? key}) : super(key: key);
-  final MessageController _messageController = Get.find<MessageController>();
+  final MessageController _messageController = Get.put(MessageController());
 
   @override
   Widget build(BuildContext context) {

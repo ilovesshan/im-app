@@ -104,9 +104,8 @@ class InitBinding implements Bindings {
 
     /// 如果为false 第二次进入时，再通过find时会报错，只能使用put进行注入(创建一个新的对象)
     /// 如果为true 第二次进入时，不会重新创建，导致数据还是之前旧的数据
-    Get.lazyPut(() => ChatController(), fenix: false);
-
-    Get.lazyPut(() => MessageController(), fenix: false);
-    Get.lazyPut(() => FriendListController(), fenix: false);
+    // Get.lazyPut(() => ChatController(), fenix: false);
+    // Get.lazyPut(() => MessageController(), fenix: false);
+    // Get.lazyPut(() => FriendListController(), fenix: false);
   }
 }

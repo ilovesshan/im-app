@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/constants.dart' as MtConstants;
 
@@ -213,12 +214,16 @@ class ChatPage extends StatelessWidget {
                                         case "1":
                                           final pickPath = await ImagePickerUtil.pick(isCamera: false);
                                           printLog(StackTrace.current, "相册选取上传=====》 $pickPath");
+                                          BrnLoadingDialog.show(context);
                                           await _chatController.uploadLoadMediaAndSendMessage(mediaPath: pickPath, type: 2);
+                                          BrnLoadingDialog.dismiss(context);
                                           break;
                                         case "2":
                                           final pickPath = await ImagePickerUtil.pick(isCamera: true);
+                                          BrnLoadingDialog.show(context);
                                           printLog(StackTrace.current, "拍照上传=====》 $pickPath");
                                           await _chatController.uploadLoadMediaAndSendMessage(mediaPath: pickPath, type: 2);
+                                          BrnLoadingDialog.dismiss(context);
                                           break;
                                         case "3":
                                           ToastUtil.show("语音通话");
