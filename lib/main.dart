@@ -102,7 +102,7 @@ class InitBinding implements Bindings {
   void dependencies() {
     Get.put(SocketController(), permanent: true);
 
-    /// 如果为false 第二次进入时，再通过find时会报错（聊天界面）
+    /// 如果为false 第二次进入时，再通过find时会报错，只能使用put进行注入(创建一个新的对象)
     /// 如果为true 第二次进入时，不会重新创建，导致数据还是之前旧的数据
     Get.lazyPut(() => ChatController(), fenix: false);
 
