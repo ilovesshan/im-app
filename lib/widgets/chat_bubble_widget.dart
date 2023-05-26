@@ -13,10 +13,9 @@ class ChatBubbleWidget extends StatelessWidget {
   final String text;
   final bool isCurrentUser;
 
-  const ChatBubbleWidget({
-    required this.type, required this.text, required this.isCurrentUser, required this.mAvatarUrl, required this.yAvatarUrl,
-    this.mNickname = "", this.yNickname = "", Key? key
-  }) : super(key: key);
+  const ChatBubbleWidget(
+      {required this.type, required this.text, required this.isCurrentUser, required this.mAvatarUrl, required this.yAvatarUrl, this.mNickname = "", this.yNickname = "", Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,66 +24,69 @@ class ChatBubbleWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: type == 2 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-        mainAxisAlignment: isCurrentUser? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtil.isEmptyWith(yNickname, "IM"), radius: 20): SizedBox(width: 40),
+          !isCurrentUser ? UserAvatarWidget(avatarPath: yAvatarUrl, avatarName: TextUtil.isEmptyWith(yNickname, "IM"), radius: 20) : SizedBox(width: 40),
           Expanded(
             child: Wrap(
-              alignment: isCurrentUser?  WrapAlignment.end : WrapAlignment.start,
-              children: [
-                buildChatBubbleContentByType(context, type)
-              ],
+              alignment: isCurrentUser ? WrapAlignment.end : WrapAlignment.start,
+              children: [buildChatBubbleContentByType(context, type)],
             ),
           ),
-          isCurrentUser ? UserAvatarWidget(avatarPath:  mAvatarUrl, avatarName: TextUtil.isEmptyWith(mNickname, "IM"), radius: 20): SizedBox(width: 40),
+          isCurrentUser ? UserAvatarWidget(avatarPath: mAvatarUrl, avatarName: TextUtil.isEmptyWith(mNickname, "IM"), radius: 20) : SizedBox(width: 40),
         ],
       ),
     );
   }
 
-  Widget buildChatBubbleContentByType (BuildContext context, int type){
-    if(type == 1){
+  Widget buildChatBubbleContentByType(BuildContext context, int type) {
+    if (type == 1) {
       // 文本
       return Container(
           margin: EdgeInsets.symmetric(horizontal: 6),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-          decoration: BoxDecoration(color: isCurrentUser? Theme.of(context).primaryColor: Color(0xffe2e7eb), borderRadius: BorderRadius.circular(8),),
-          child: Text(text, style: TextStyle(color: isCurrentUser? Colors.white : Colors.black), textAlign: isCurrentUser? TextAlign.right : TextAlign.left)
-      );
-    }else if(type == 2){
+          decoration: BoxDecoration(
+            color: isCurrentUser ? Theme.of(context).primaryColor : Color(0xffe2e7eb),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(text, style: TextStyle(color: isCurrentUser ? Colors.white : Colors.black), textAlign: isCurrentUser ? TextAlign.right : TextAlign.left));
+    } else if (type == 2) {
       // 图片
       return Container(
-          margin: EdgeInsets.symmetric(horizontal: 6),
-          padding: EdgeInsets.all(4),
-          decoration: BoxDecoration(color: isCurrentUser? Theme.of(context).primaryColor: Color(0xffe2e7eb), borderRadius: BorderRadius.circular(8),),
-          child: ClipRRect(child: Image.network(text, width: 180, height: 200, fit: BoxFit.fill), borderRadius: BorderRadius.circular(5))
+        margin: EdgeInsets.symmetric(horizontal: 6),
+        padding: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: isCurrentUser ? Theme.of(context).primaryColor : Color(0xffe2e7eb),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: ClipRRect(child: ClipRRect(borderRadius: BorderRadius.circular(6), child: Image.network(text, width: 80, height: 180, fit: BoxFit.fitHeight,)), borderRadius: BorderRadius.circular(5)),
       );
-    }else if(type == 3){
+    } else if (type == 3) {
       // 语音
       return GestureDetector(
         child: Container(
             margin: EdgeInsets.symmetric(horizontal: 6),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(color: isCurrentUser? Theme.of(context).primaryColor: Color(0xffe2e7eb), borderRadius: BorderRadius.circular(8),),
-            child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.mic, size: 20, color: isCurrentUser?  Colors.white: Theme.of(context).primaryColor),
-                  Text("点击播放", style: TextStyle(fontSize: 12, color: isCurrentUser?  Colors.white: Theme.of(context).primaryColor))
-                ]
-            )
-        ),
+            decoration: BoxDecoration(
+              color: isCurrentUser ? Theme.of(context).primaryColor : Color(0xffe2e7eb),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Icon(Icons.mic, size: 20, color: isCurrentUser ? Colors.white : Theme.of(context).primaryColor),
+              Text("点击播放", style: TextStyle(fontSize: 12, color: isCurrentUser ? Colors.white : Theme.of(context).primaryColor))
+            ])),
         onTap: () async {
           final path = await FileDownloadUtil.downLoadFile(text);
-          ToastUtil.show( "开始播放");
-          RecordUtil.playRecorder(recordSourcesPath: path, onResultCallBack: (){
-            ToastUtil.show( "播放结束");
-          });
+          ToastUtil.show("开始播放");
+          RecordUtil.playRecorder(
+              recordSourcesPath: path,
+              onResultCallBack: () {
+                ToastUtil.show("播放结束");
+              });
         },
       );
       return Container();
-    }else{
+    } else {
       return Container();
     }
   }
