@@ -9,9 +9,7 @@ import 'package:im/widgets/user_avatar_widget.dart';
 
 class FriendPage extends StatelessWidget {
   FriendPage({Key? key}) : super(key: key);
-
-  final FriendListController _friendListController = Get.put(FriendListController());
-
+  final FriendListController _friendListController = Get.find<FriendListController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

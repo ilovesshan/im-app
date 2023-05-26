@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:common_utils_v2/common_utils_v2.dart';
 
 import 'package:im/controller/chat_controller.dart';
+import 'package:im/controller/friend_list_controller.dart';
 import 'package:im/controller/message_controller.dart';
 import 'package:im/controller/socket_controller.dart';
 
 import 'package:im/router/app_router.dart';
 
 void main() async {
+  /// 覆盖HttpHelperUtil的默认BaseUrl地址
+  HttpHelperUtil.updateBaseUrl(baseurl: "https://43967714.cpolar.io", baseWsUrl: "ws://7bb8c5be.cpolar.io/ws");
+
   runApp(const RootApplication());
 
   /// 初始化 SharedPreferences(可选)
@@ -16,9 +20,6 @@ void main() async {
 
   /// 初始化 Sqlite数据库(可选)
   await initSqliteDb();
-
-  /// 覆盖HttpHelperUtil的默认BaseUrl地址
-  HttpHelperUtil.updateBaseUrl(baseurl: "https://43967714.cpolar.io", baseWsUrl: "ws://7bb8c5be.cpolar.io");
 }
 
 class RootApplication extends StatefulWidget {
@@ -99,8 +100,13 @@ Future<void> initSqliteDb() async {
 class InitBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put(ChatController(), permanent: true);
-    Get.put(MessageController(), permanent: true);
     Get.put(SocketController(), permanent: true);
+
+    /// 如果为false 第二次进入时，再通过find时会报错（聊天界面）
+    /// 如果为true 第二次进入时，不会重新创建，导致数据还是之前旧的数据
+    Get.lazyPut(() => ChatController(), fenix: false);
+
+    Get.lazyPut(() => MessageController(), fenix: false);
+    Get.lazyPut(() => FriendListController(), fenix: false);
   }
 }
